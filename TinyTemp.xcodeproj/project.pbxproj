@@ -11,7 +11,22 @@
 		4CC15CB32AECED03005150EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CC15CB22AECED03005150EC /* Assets.xcassets */; };
 		4CC15CB62AECED03005150EC /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC15CB42AECED03005150EC /* MainMenu.xib */; };
 		4CC15CB82AECED03005150EC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC15CB72AECED03005150EC /* main.m */; };
+		4CC15CCE2AED072C005150EC /* IOHID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC15CCD2AED072C005150EC /* IOHID.m */; };
+		4CC15CDD2AF12511005150EC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC15CDC2AF12511005150EC /* main.m */; };
+		4CC15CE12AF1269B005150EC /* IOHID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC15CCD2AED072C005150EC /* IOHID.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4CC15CD82AF12511005150EC /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4CC15CAC2AECED03005150EC /* TinyTemp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinyTemp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -21,10 +36,25 @@
 		4CC15CB52AECED03005150EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		4CC15CB72AECED03005150EC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4CC15CB92AECED03005150EC /* TinyTemp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TinyTemp.entitlements; sourceTree = "<group>"; };
+		4CC15CC12AECF122005150EC /* SMC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMC.m; sourceTree = "<group>"; };
+		4CC15CC22AECF122005150EC /* SMC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMC.h; sourceTree = "<group>"; };
+		4CC15CC32AECF123005150EC /* SMC-Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SMC-Internal.h"; sourceTree = "<group>"; };
+		4CC15CCC2AED072C005150EC /* IOHID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOHID.h; sourceTree = "<group>"; };
+		4CC15CCD2AED072C005150EC /* IOHID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IOHID.m; sourceTree = "<group>"; };
+		4CC15CDA2AF12511005150EC /* dump-sensors */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "dump-sensors"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CC15CDC2AF12511005150EC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4CC15CE22AF22D99005150EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		4CC15CA92AECED03005150EC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CC15CD72AF12511005150EC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -38,6 +68,7 @@
 			isa = PBXGroup;
 			children = (
 				4CC15CAE2AECED03005150EC /* TinyTemp */,
+				4CC15CDB2AF12511005150EC /* dump-sensors */,
 				4CC15CAD2AECED03005150EC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -46,6 +77,7 @@
 			isa = PBXGroup;
 			children = (
 				4CC15CAC2AECED03005150EC /* TinyTemp.app */,
+				4CC15CDA2AF12511005150EC /* dump-sensors */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -53,6 +85,9 @@
 		4CC15CAE2AECED03005150EC /* TinyTemp */ = {
 			isa = PBXGroup;
 			children = (
+				4CC15CE22AF22D99005150EC /* Info.plist */,
+				4CC15CCA2AED06D5005150EC /* IOHID */,
+				4CC15CBF2AECF0FE005150EC /* SMC */,
 				4CC15CAF2AECED03005150EC /* AppDelegate.h */,
 				4CC15CB02AECED03005150EC /* AppDelegate.m */,
 				4CC15CB22AECED03005150EC /* Assets.xcassets */,
@@ -61,6 +96,33 @@
 				4CC15CB92AECED03005150EC /* TinyTemp.entitlements */,
 			);
 			path = TinyTemp;
+			sourceTree = "<group>";
+		};
+		4CC15CBF2AECF0FE005150EC /* SMC */ = {
+			isa = PBXGroup;
+			children = (
+				4CC15CC32AECF123005150EC /* SMC-Internal.h */,
+				4CC15CC22AECF122005150EC /* SMC.h */,
+				4CC15CC12AECF122005150EC /* SMC.m */,
+			);
+			path = SMC;
+			sourceTree = "<group>";
+		};
+		4CC15CCA2AED06D5005150EC /* IOHID */ = {
+			isa = PBXGroup;
+			children = (
+				4CC15CCC2AED072C005150EC /* IOHID.h */,
+				4CC15CCD2AED072C005150EC /* IOHID.m */,
+			);
+			path = IOHID;
+			sourceTree = "<group>";
+		};
+		4CC15CDB2AF12511005150EC /* dump-sensors */ = {
+			isa = PBXGroup;
+			children = (
+				4CC15CDC2AF12511005150EC /* main.m */,
+			);
+			path = "dump-sensors";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -83,6 +145,23 @@
 			productReference = 4CC15CAC2AECED03005150EC /* TinyTemp.app */;
 			productType = "com.apple.product-type.application";
 		};
+		4CC15CD92AF12511005150EC /* dump-sensors */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CC15CDE2AF12511005150EC /* Build configuration list for PBXNativeTarget "dump-sensors" */;
+			buildPhases = (
+				4CC15CD62AF12511005150EC /* Sources */,
+				4CC15CD72AF12511005150EC /* Frameworks */,
+				4CC15CD82AF12511005150EC /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "dump-sensors";
+			productName = "dump-sensors";
+			productReference = 4CC15CDA2AF12511005150EC /* dump-sensors */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -93,6 +172,9 @@
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					4CC15CAB2AECED03005150EC = {
+						CreatedOnToolsVersion = 15.0.1;
+					};
+					4CC15CD92AF12511005150EC = {
 						CreatedOnToolsVersion = 15.0.1;
 					};
 				};
@@ -111,6 +193,7 @@
 			projectRoot = "";
 			targets = (
 				4CC15CAB2AECED03005150EC /* TinyTemp */,
+				4CC15CD92AF12511005150EC /* dump-sensors */,
 			);
 		};
 /* End PBXProject section */
@@ -134,6 +217,16 @@
 			files = (
 				4CC15CB82AECED03005150EC /* main.m in Sources */,
 				4CC15CB12AECED03005150EC /* AppDelegate.m in Sources */,
+				4CC15CCE2AED072C005150EC /* IOHID.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CC15CD62AF12511005150EC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CC15CE12AF1269B005150EC /* IOHID.m in Sources */,
+				4CC15CDD2AF12511005150EC /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,8 +371,10 @@
 				DEVELOPMENT_TEAM = B42PBJA6QF;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TinyTemp/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainNibFile = MainMenu;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -304,8 +399,10 @@
 				DEVELOPMENT_TEAM = B42PBJA6QF;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TinyTemp/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainNibFile = MainMenu;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -315,6 +412,28 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "de.udo-thiel.TinyTemp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		4CC15CDF2AF12511005150EC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B42PBJA6QF;
+				ENABLE_HARDENED_RUNTIME = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.udo-thiel.TinyTemp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		4CC15CE02AF12511005150EC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B42PBJA6QF;
+				ENABLE_HARDENED_RUNTIME = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.udo-thiel.TinyTemp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -335,6 +454,15 @@
 			buildConfigurations = (
 				4CC15CBD2AECED03005150EC /* Debug */,
 				4CC15CBE2AECED03005150EC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4CC15CDE2AF12511005150EC /* Build configuration list for PBXNativeTarget "dump-sensors" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CC15CDF2AF12511005150EC /* Debug */,
+				4CC15CE02AF12511005150EC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
