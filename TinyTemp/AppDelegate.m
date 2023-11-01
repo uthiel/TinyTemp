@@ -7,10 +7,12 @@
 
 #import "AppDelegate.h"
 #import "IOHID/IOHID.h"
+#import <ServiceManagement/ServiceManagement.h>
 
 @interface AppDelegate () <NSMenuDelegate>
 @property IBOutlet NSMenu *statusItemMenu;
 @property IBOutlet NSMenu *allTempsMenu;
+@property IBOutlet NSMenuItem *lal;
 @property (readonly) NSStatusItem * _Nonnull statusItem;
 @end
 
@@ -29,6 +31,9 @@
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+	// update lal
+	[self updateLaunchAtLoginMenuItem];
+	
 	// start sensor singleton
 	iohid = IOHID.shared;
 	
@@ -96,19 +101,45 @@
 }
 - (void)menuDidClose:(NSMenu *)menu {
 	if (menu == self.allTempsMenu) {
-		NSLog(@"Stop");
 		[timer_all invalidate];
 	}
 }
 - (void)updateAllTemps:(NSTimer *)timer {
-	NSLog(@"Updating...");
 	for (NSMenuItem *item in self.allTempsMenu.itemArray) {
 		item.title	= [item.representedObject nameAndTemperature];
 	}
 }
 - (void)allTempAction:(NSMenuItem *)item {
-	NSLog(@"%@", item);
+	// empty action to enable all Temp menu items
 }
+
+//MARK: Launch at Login
+- (void)updateLaunchAtLoginMenuItem {
+	if (@available(macOS 13.0, *)) {
+		SMAppServiceStatus status	= SMAppService.mainAppService.status;
+		self.lal.state				=  (status == SMAppServiceStatusEnabled);
+		self.lal.enabled			= YES;
+	}
+}
+- (IBAction)toggleLaunchAtLogin:(NSMenuItem *)sender {
+	if (@available(macOS 13.0, *)) {
+		SMAppService *as	= SMAppService.mainAppService;
+		NSError *error;
+		if (as.status == SMAppServiceStatusEnabled) {
+			[as unregisterAndReturnError:&error];
+			if (error) {
+				NSLog(@"Unregistered with error: %@",error);
+			}
+		} else {
+			[as registerAndReturnError:&error];
+			if (error) {
+				NSLog(@"Registered with error: %@",error);
+			}
+		}
+		sender.state	= !sender.state;
+	}
+}
+
 
 //MARK: AppDelegate
 - (void)applicationWillTerminate:(NSNotification *)aNotification {

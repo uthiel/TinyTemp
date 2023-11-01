@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22155" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22155"/>
     </dependencies>
     <objects>
@@ -14,6 +15,7 @@
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
             <connections>
                 <outlet property="allTempsMenu" destination="bCI-ic-mKF" id="kC5-u0-FOB"/>
+                <outlet property="lal" destination="a9N-PU-G9b" id="iHo-Iy-iya"/>
                 <outlet property="statusItemMenu" destination="Y2Y-ek-jvN" id="egq-7j-nzi"/>
             </connections>
         </customObject>
@@ -24,6 +26,12 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="orderFrontStandardAboutPanel:" target="-1" id="Exp-CZ-Vem"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Launch at Login" id="a9N-PU-G9b">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="toggleLaunchAtLogin:" target="Voe-Tx-rLC" id="38A-AB-K9G"/>
                     </connections>
                 </menuItem>
                 <menuItem title="All Temperatures" id="Ar4-Zk-v1c">
