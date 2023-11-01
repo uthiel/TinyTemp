@@ -6,8 +6,6 @@
 //
 
 #import "IOHID.h"
-#import <IOKit/hidsystem/IOHIDEventSystemClient.h>
-#import <IOKit/hidsystem/IOHIDServiceClient.h>
 
 #define IOHIDEventFieldBase( _type_ ) ( _type_ << 16 )
 #define IOHIDEventTypeTemperature			0x0FLL
@@ -16,17 +14,11 @@ extern IOHIDEventSystemClientRef 	IOHIDEventSystemClientCreate(CFAllocatorRef);
 extern CFTypeRef                 	IOHIDServiceClientCopyEvent(IOHIDServiceClientRef, int64_t, int64_t, int64_t);
 extern double                    	IOHIDEventGetFloatValue(CFTypeRef, int64_t);
 
+static NSString *pre_batt	= @"gas gauge battery";
+static NSString *pre_ssd	= @"NAND CH";
 
 
 //MARK: - TinySensor
-@interface TinySensor : NSObject
-@property (copy) NSString *name;
-
-- (instancetype)initWithService:(IOHIDServiceClientRef)service;
-- (double)temperature;
-@end
-
-
 @implementation TinySensor {
 	IOHIDServiceClientRef _service;
 }
@@ -39,6 +31,18 @@ extern double                    	IOHIDEventGetFloatValue(CFTypeRef, int64_t);
 		self = [super init];
 		_service	= service;
 		_name		= sensor;
+		if ([self matchesPrefix:pre_batt]) {
+			_prettyName	= @"Battery";
+		} else if ([self matchesPrefix:pre_ssd]) {
+			NSString *pattern			= [NSString stringWithFormat:@"^%@(\\d) .*", pre_ssd];
+			NSRegularExpression *reg	= [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
+			NSTextCheckingResult *res	= [reg firstMatchInString:_name options:0 range:NSMakeRange(0, _name.length)];
+			if (res && res.numberOfRanges > 1) {
+				NSRange range	= [res rangeAtIndex:1];
+				NSString *num	= [_name substringWithRange:range];
+				_prettyName		= [@"SSD #" stringByAppendingString:num];
+			}
+		}
 		if (event) CFRelease(event);
 		return self;
 	} else {
@@ -62,18 +66,24 @@ extern double                    	IOHIDEventGetFloatValue(CFTypeRef, int64_t);
 	return value;;
 }
 
+- (NSString *)nameAndTemperature {
+	NSString *name	= (self.prettyName) ? self.prettyName : self.name;
+	return [NSString stringWithFormat:@"%-12s %.1fºC", name.UTF8String, self.temperature];
+}
+
 - (BOOL)matchesRegex:(NSRegularExpression *)regex {
 	return ([regex numberOfMatchesInString:self.name options:0 range:NSMakeRange(0, self.name.length)] > 0);
 }
-
-
+- (BOOL)matchesPrefix:(NSString *)prefix {
+	return [self.name hasPrefix:prefix];
+}
 @end
 
 
 //MARK: - IOHID
 @interface IOHID()
 @property( nonatomic, readwrite, assign, nullable ) IOHIDEventSystemClientRef client;
-@property NSMutableArray *sensors_cpu_die, *sensors_SSD, *sensors_Battery;
+@property NSArray *sensors_all, *sensors_cpu_die, *sensors_SSD, *sensors_Battery;
 @end
 
 
@@ -91,10 +101,10 @@ extern double                    	IOHIDEventGetFloatValue(CFTypeRef, int64_t);
 
 - (instancetype)init {
     if ((self = [super init])) {
-		_sensors_cpu_die	= NSMutableArray.array;
-//		_sensors_cpu_dev	= NSMutableArray.array;
-		_sensors_SSD		= NSMutableArray.array;
-		_sensors_Battery	= NSMutableArray.array;
+		NSMutableArray *_s_all		= NSMutableArray.array;
+		NSMutableArray *_s_cpu_die	= NSMutableArray.array;
+		NSMutableArray *_s_SSD		= NSMutableArray.array;
+		NSMutableArray *_s_Battery	= NSMutableArray.array;
 		
 		// get services
 		self.client			= IOHIDEventSystemClientCreate(kCFAllocatorDefault);
@@ -102,44 +112,49 @@ extern double                    	IOHIDEventGetFloatValue(CFTypeRef, int64_t);
 		
 		// find temperature sensors
 		NSRegularExpression *regex_cpu_die	= [NSRegularExpression regularExpressionWithPattern:@"^PMU.* tdie" options:0 error:nil];
-//		NSRegularExpression *regex_cpu_dev	= [NSRegularExpression regularExpressionWithPattern:@"^PMU.* tdev" options:0 error:nil];
-		NSRegularExpression *regex_batt		= [NSRegularExpression regularExpressionWithPattern:@"^gas gauge battery" options:0 error:nil];
-		NSRegularExpression *regex_ssd		= [NSRegularExpression regularExpressionWithPattern:@"^NAND CH" options:0 error:nil];
 		
 		for (id o in services) {
 			IOHIDServiceClientRef service	= (__bridge IOHIDServiceClientRef)o;
 			TinySensor *sensor				= [TinySensor.alloc initWithService:service];
+			
+			// add sensor to all
+			if (sensor) {
+				[_s_all addObject:sensor];
+			}
 
+			// categorize sensor
 			if ([sensor matchesRegex:regex_cpu_die]) {
-				[_sensors_cpu_die addObject:sensor];
+				[_s_cpu_die addObject:sensor];
 				
-//			} else if ([sensor matchesRegex:regex_cpu_dev]) {
-//				[_sensors_cpu_dev addObject:sensor];
+			} else if ([sensor matchesPrefix:pre_batt]) {
+				[_s_Battery addObject:sensor];
 				
-			} else if ([sensor matchesRegex:regex_batt]) {
-				[_sensors_Battery addObject:sensor];
-				
-			} else if ([sensor matchesRegex:regex_ssd]) {
-				[_sensors_SSD addObject:sensor];
-				
-			} else if (sensor) {
-				NSLog(@"Unknown Temperature Sensor: '%@'", sensor);
+			} else if ([sensor matchesPrefix:pre_ssd]) {
+				[_s_SSD addObject:sensor];
 			}
 		}
 		// sort arrays
 		NSSortDescriptor *d = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
-		for (NSMutableArray *a in @[_sensors_SSD, _sensors_cpu_die, _sensors_Battery]) {
+		for (NSMutableArray *a in @[_s_all,_s_SSD, _s_cpu_die, _s_Battery]) {
 			[a sortUsingDescriptors:@[d]];
 		}
+		// make arrays immutable
+		_sensors_all		= [NSArray arrayWithArray:_s_all];
+		_sensors_cpu_die	= [NSArray arrayWithArray:_s_cpu_die];
+		_sensors_SSD		= [NSArray arrayWithArray:_s_SSD];
+		_sensors_Battery	= [NSArray arrayWithArray:_s_Battery];
     }
     return self;
 }
 
 - (NSString *)description {
-	return [NSString stringWithFormat:@"CPU=%@ SSD=%@ Batt=%@", _sensors_cpu_die, _sensors_SSD, _sensors_Battery];
+	return [NSString stringWithFormat:@"CPU=%@ SSD=%@ Batt=%@ All=%@", _sensors_cpu_die, _sensors_SSD, _sensors_Battery, _sensors_all];
 }
 
 - (double)avgForArray:(NSArray *)array {
+	if (array.count == 0) {
+		return -1.0;
+	}
 	double avg = 0.0;
 	for (TinySensor *sensor in array) {
 		avg += sensor.temperature;
@@ -159,4 +174,7 @@ extern double                    	IOHIDEventGetFloatValue(CFTypeRef, int64_t);
 	return [self avgForArray:_sensors_Battery];
 }
 
+- (NSArray<TinySensor *> *)allSensors {
+	return _sensors_all;
+}
 @end

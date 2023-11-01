@@ -13,6 +13,7 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
             <connections>
+                <outlet property="allTempsMenu" destination="bCI-ic-mKF" id="kC5-u0-FOB"/>
                 <outlet property="statusItemMenu" destination="Y2Y-ek-jvN" id="egq-7j-nzi"/>
             </connections>
         </customObject>
@@ -24,6 +25,14 @@
                     <connections>
                         <action selector="orderFrontStandardAboutPanel:" target="-1" id="Exp-CZ-Vem"/>
                     </connections>
+                </menuItem>
+                <menuItem title="All Temperatures" id="Ar4-Zk-v1c">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="All Temperatures" id="bCI-ic-mKF">
+                        <connections>
+                            <outlet property="delegate" destination="Voe-Tx-rLC" id="jYc-zY-MvB"/>
+                        </connections>
+                    </menu>
                 </menuItem>
                 <menuItem title="Quit TinyTemp" id="4sb-4s-VLi">
                     <modifierMask key="keyEquivalentModifierMask"/>

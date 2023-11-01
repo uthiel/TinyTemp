@@ -8,14 +8,15 @@
 #import "AppDelegate.h"
 #import "IOHID/IOHID.h"
 
-@interface AppDelegate ()
-@property IBOutlet NSMenu * _Nonnull statusItemMenu;
+@interface AppDelegate () <NSMenuDelegate>
+@property IBOutlet NSMenu *statusItemMenu;
+@property IBOutlet NSMenu *allTempsMenu;
 @property (readonly) NSStatusItem * _Nonnull statusItem;
 @end
 
 @implementation AppDelegate {
 	IOHID *iohid;
-	NSTimer *timer_cpu, *timer_ssd, *timer_batt;
+	NSTimer *timer_cpu, *timer_ssd, *timer_batt, *timer_all;
 	double temp_cpu, temp_ssd, temp_batt;
 }
 
@@ -45,6 +46,14 @@
 	// start batt timer
 	timer_batt			= [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(updateSSD:) userInfo:nil repeats:YES];
 	timer_batt.tolerance= 1.0;
+	
+	// populate all temps menu
+	self.allTempsMenu.font	= [NSFont monospacedSystemFontOfSize:-1.0 weight:NSFontWeightRegular];
+	
+	for (TinySensor *sensor in [iohid allSensors]) {
+		NSMenuItem *item 		= [self.allTempsMenu addItemWithTitle:sensor.nameAndTemperature action:@selector(allTempAction:) keyEquivalent:@""];
+		item.representedObject	= sensor;
+	}
 }
 
 //MARK: StatusItem Updates
@@ -69,10 +78,39 @@
 }
 
 - (NSString *)formattedTempForTemp:(double)temp {
-	return [NSString stringWithFormat:@"%.0fºC", round(temp)];
+	if (temp < 0.0) {
+		return @"-";
+	} else {
+		return [NSString stringWithFormat:@"%.0fºC", round(temp)];
+	}
 }
 
-//MARK: AppDelegate Stuff
+//MARK: all temps menu
+- (void)menuWillOpen:(NSMenu *)menu {
+	if (menu == self.allTempsMenu) {
+		NSLog(@"Start");
+		// timer has to run in NSEventTrackingRunLoopMode for real-time NSMenu updates
+		timer_all = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(updateAllTemps:) userInfo:nil repeats:YES];
+		[[NSRunLoop currentRunLoop] addTimer:timer_all forMode:NSEventTrackingRunLoopMode];
+	}
+}
+- (void)menuDidClose:(NSMenu *)menu {
+	if (menu == self.allTempsMenu) {
+		NSLog(@"Stop");
+		[timer_all invalidate];
+	}
+}
+- (void)updateAllTemps:(NSTimer *)timer {
+	NSLog(@"Updating...");
+	for (NSMenuItem *item in self.allTempsMenu.itemArray) {
+		item.title	= [item.representedObject nameAndTemperature];
+	}
+}
+- (void)allTempAction:(NSMenuItem *)item {
+	NSLog(@"%@", item);
+}
+
+//MARK: AppDelegate
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
 }
 - (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app {
