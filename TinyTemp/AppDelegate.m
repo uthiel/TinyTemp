@@ -20,12 +20,14 @@
 	IOHID *iohid;
 	NSTimer *timer_cpu, *timer_ssd, *timer_batt, *timer_all;
 	double temp_cpu, temp_ssd, temp_batt;
+	NSString *thermalState;
 }
 
 - (void)awakeFromNib {
 	// NSStatusItem
 	_statusItem							= [NSStatusBar.systemStatusBar statusItemWithLength:NSVariableStatusItemLength];
 	_statusItem.behavior				= NSStatusItemBehaviorTerminationOnRemoval;
+	_statusItem.button.imagePosition	= NSImageLeft;
 	_statusItem.menu					= self.statusItemMenu;
 	_statusItem.button.title			= [NSBundle.mainBundle objectForInfoDictionaryKey:(__bridge NSString*)kCFBundleNameKey];
 }
@@ -33,6 +35,10 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	// update lal
 	[self updateLaunchAtLoginMenuItem];
+	
+	// subscribe to thermal state changes
+	[self updateStatusItemImage:nil];// To receive NSProcessInfoThermalStateDidChangeNotification, you must access the thermalState prior to registering for the notification.
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(updateStatusItemImage:) name:NSProcessInfoThermalStateDidChangeNotification object:nil];
 	
 	// start sensor singleton
 	iohid = IOHID.shared;
@@ -61,12 +67,20 @@
 	}
 }
 
+- (NSString *)formattedTempForTemp:(double)temp {
+	if (temp < 0.0) {
+		return @"-";
+	} else {
+		return [NSString stringWithFormat:@"%.0fºC", round(temp)];
+	}
+}
+
 //MARK: StatusItem Updates
 - (void)updateStatusItemToolTip {
 	NSString *cpu	= [self formattedTempForTemp:temp_cpu];
 	NSString *ssd	= [self formattedTempForTemp:temp_ssd];
 	NSString *batt	= [self formattedTempForTemp:temp_batt];
-	self.statusItem.button.toolTip	= [NSString stringWithFormat:@"CPU:%@ SSD:%@ Batt:%@", cpu, ssd, batt];
+	self.statusItem.button.toolTip	= [NSString stringWithFormat:@"CPU:%@ SSD:%@ Batt:%@ Thermal State: %@", cpu, ssd, batt, thermalState];
 }
 - (void)updateCPU:(NSTimer *)timer {
 	temp_cpu	= [iohid readCPUTemperature];
@@ -82,12 +96,45 @@
 	[self updateStatusItemToolTip];
 }
 
-- (NSString *)formattedTempForTemp:(double)temp {
-	if (temp < 0.0) {
-		return @"-";
-	} else {
-		return [NSString stringWithFormat:@"%.0fºC", round(temp)];
+- (void)updateStatusItemImage:(NSNotification *)n {
+	//	NSProcessInfoThermalState state = NSProcessInfo.processInfo.thermalState;
+	NSProcessInfoThermalState state = arc4random_uniform(4);
+	NSLog(@"state=%lu", state);
+	switch (state) {
+		case NSProcessInfoThermalStateNominal:
+			self.statusItem.button.image	= nil;
+			thermalState	= @"Normal";
+			break;
+		case NSProcessInfoThermalStateFair:
+			self.statusItem.button.image	= [NSImage imageWithSystemSymbolName:@"thermometer.low" variableValue:0.33 accessibilityDescription:@"Thermal State: Fair"];
+			thermalState	= @"Fair";
+			break;
+		case NSProcessInfoThermalStateSerious: {
+			NSImage *img	= [NSImage imageWithSystemSymbolName:@"thermometer.medium" variableValue:0.66 accessibilityDescription:@"Thermal State: Serious"];
+			self.statusItem.button.image = [self image:img tintedWithColor:NSColor.systemOrangeColor];
+			thermalState	= @"Serious";
+		}
+			break;
+		case NSProcessInfoThermalStateCritical: {
+			NSImage *img	= [NSImage imageWithSystemSymbolName:@"thermometer.high" variableValue:1.0 accessibilityDescription:@"Thermal State: Critical"];
+			self.statusItem.button.image = [self image:img tintedWithColor:NSColor.systemRedColor];
+			thermalState	= @"Critical";
+		}
+			break;
 	}
+}
+
+- (NSImage *)image:(NSImage *)img tintedWithColor:(NSColor *)tint {
+	NSImage *image = [img copy];
+	if (tint) {
+		[image setTemplate:NO];
+		[image lockFocus];
+		[tint set];
+		NSRect imageRect = {NSZeroPoint, [image size]};
+		NSRectFillUsingOperation(imageRect, NSCompositingOperationSourceIn);
+		[image unlockFocus];
+	}
+	return image;
 }
 
 //MARK: all temps menu
