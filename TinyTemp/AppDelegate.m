@@ -37,8 +37,8 @@
 	[self updateLaunchAtLoginMenuItem];
 	
 	// subscribe to thermal state changes
-	[self updateStatusItemImage:nil];// To receive NSProcessInfoThermalStateDidChangeNotification, you must access the thermalState prior to registering for the notification.
-	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(updateStatusItemImage:) name:NSProcessInfoThermalStateDidChangeNotification object:nil];
+//	[self updateStatusItemImage:nil];// To receive NSProcessInfoThermalStateDidChangeNotification, you must access the thermalState prior to registering for the notification.
+//	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(updateStatusItemImage:) name:NSProcessInfoThermalStateDidChangeNotification object:nil];
 	
 	// start sensor singleton
 	iohid = IOHID.shared;
@@ -98,11 +98,12 @@
 
 - (void)updateStatusItemImage:(NSNotification *)n {
 	NSProcessInfoThermalState state = NSProcessInfo.processInfo.thermalState;
-
+//	NSLog(@"state = %lu noti=%@ queue=%@", state, n, NSOperationQueue.currentQueue);
+	
 	switch (state) {
 		case NSProcessInfoThermalStateNominal:
 			self.statusItem.button.image	= nil;
-			thermalState	= @"Normal";
+			thermalState	= @"Nominal";
 			break;
 		case NSProcessInfoThermalStateFair:
 			self.statusItem.button.image	= [NSImage imageWithSystemSymbolName:@"thermometer.low" variableValue:0.33 accessibilityDescription:@"Thermal State: Fair"];
@@ -139,7 +140,6 @@
 //MARK: all temps menu
 - (void)menuWillOpen:(NSMenu *)menu {
 	if (menu == self.allTempsMenu) {
-		NSLog(@"Start");
 		// timer has to run in NSEventTrackingRunLoopMode for real-time NSMenu updates
 		timer_all = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(updateAllTemps:) userInfo:nil repeats:YES];
 		[[NSRunLoop currentRunLoop] addTimer:timer_all forMode:NSEventTrackingRunLoopMode];

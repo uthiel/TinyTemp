@@ -157,7 +157,10 @@ static NSString *pre_ssd	= @"NAND CH";
 	}
 	double avg = 0.0;
 	for (TinySensor *sensor in array) {
-		avg += sensor.temperature;
+		double temp	= sensor.temperature;
+		if (temp > 0) {
+			avg += temp;
+		}
 	}
 	avg = avg / array.count;
 	
