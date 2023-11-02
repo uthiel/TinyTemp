@@ -7,6 +7,6 @@
 	<key>NSSupportsAutomaticTermination</key>
 	<false/>
 	<key>NSSupportsSuddenTermination</key>
-	<false/>
+	<true/>
 </dict>
 </plist>
