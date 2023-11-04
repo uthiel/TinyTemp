@@ -44,7 +44,8 @@
 	[self updateBatt:nil];
 	
 	// start cpu timer
-	timer_cpu			= [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(updateCPU:) userInfo:nil repeats:YES];
+	timer_cpu			= [NSTimer timerWithTimeInterval:5.0 target:self selector:@selector(updateCPU:) userInfo:nil repeats:YES];
+	[[NSRunLoop currentRunLoop] addTimer:timer_cpu forMode:NSRunLoopCommonModes];
 	timer_cpu.tolerance	= 1.0;
 	// start ssd timer
 	timer_ssd			= [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(updateSSD:) userInfo:nil repeats:YES];
