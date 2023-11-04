@@ -375,7 +375,7 @@
 				INFOPLIST_FILE = TinyTemp/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2013 Udo Thiel";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2023 Udo Thiel";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -405,7 +405,7 @@
 				INFOPLIST_FILE = TinyTemp/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2013 Udo Thiel";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2023 Udo Thiel";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
