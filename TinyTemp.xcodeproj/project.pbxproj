@@ -29,6 +29,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4CA9B2BF2AF6A9B700B40821 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4CC15CAC2AECED03005150EC /* TinyTemp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinyTemp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CC15CAF2AECED03005150EC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4CC15CB02AECED03005150EC /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -67,6 +68,7 @@
 		4CC15CA32AECED03005150EC = {
 			isa = PBXGroup;
 			children = (
+				4CA9B2BF2AF6A9B700B40821 /* README.md */,
 				4CC15CAE2AECED03005150EC /* TinyTemp */,
 				4CC15CDB2AF12511005150EC /* dump-sensors */,
 				4CC15CAD2AECED03005150EC /* Products */,
