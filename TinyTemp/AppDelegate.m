@@ -72,7 +72,7 @@
 
 //MARK: StatusItem Updates
 - (void)updateStatusItemToolTip {
-	NSString *cpu	= [self formattedTempForTemp:temp_cpu];
+	NSString *cpu	= self.statusItem.button.title;
 	NSString *ssd	= [self formattedTempForTemp:temp_ssd];
 	NSString *batt	= [self formattedTempForTemp:temp_batt];
 	self.statusItem.button.toolTip	= [NSString stringWithFormat:@"CPU:%@ SSD:%@ Batt:%@", cpu, ssd, batt];
