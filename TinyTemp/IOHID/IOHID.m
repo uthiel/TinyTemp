@@ -16,6 +16,7 @@ extern double                    	IOHIDEventGetFloatValue(CFTypeRef, int64_t);
 
 static NSString *pre_batt	= @"gas gauge battery";
 static NSString *pre_ssd	= @"NAND CH";
+static NSString *pre_pmu1	= @"PMU tdie";
 
 
 //MARK: - TinySensor
@@ -31,9 +32,11 @@ static NSString *pre_ssd	= @"NAND CH";
 		self = [super init];
 		_service	= service;
 		_name		= sensor;
+		_prettyName	= _name.copy;
 		if ([self matchesPrefix:pre_batt]) {
 			_prettyName	= @"Battery";
 		} else if ([self matchesPrefix:pre_ssd]) {
+			// convert "NAND CH0 temp" to "SSD %0"
 			NSString *pattern			= [NSString stringWithFormat:@"^%@(\\d) .*", pre_ssd];
 			NSRegularExpression *reg	= [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
 			NSTextCheckingResult *res	= [reg firstMatchInString:_name options:0 range:NSMakeRange(0, _name.length)];
@@ -67,13 +70,9 @@ static NSString *pre_ssd	= @"NAND CH";
 }
 
 - (NSString *)nameAndTemperature {
-	NSString *name	= (self.prettyName) ? self.prettyName : self.name;
-	return [NSString stringWithFormat:@"%-12s %.1fºC", name.UTF8String, self.temperature];
+	return [NSString stringWithFormat:@"%-12s %.1fºC", self.name.UTF8String, self.temperature];
 }
 
-- (BOOL)matchesRegex:(NSRegularExpression *)regex {
-	return ([regex numberOfMatchesInString:self.name options:0 range:NSMakeRange(0, self.name.length)] > 0);
-}
 - (BOOL)matchesPrefix:(NSString *)prefix {
 	return [self.name hasPrefix:prefix];
 }
@@ -111,7 +110,6 @@ static NSString *pre_ssd	= @"NAND CH";
 		NSArray *services	= CFBridgingRelease(IOHIDEventSystemClientCopyServices(self.client));
 		
 		// find temperature sensors
-		NSRegularExpression *regex_cpu_die	= [NSRegularExpression regularExpressionWithPattern:@"^PMU.* tdie" options:0 error:nil];
 		
 		for (id o in services) {
 			IOHIDServiceClientRef service	= (__bridge IOHIDServiceClientRef)o;
@@ -123,7 +121,7 @@ static NSString *pre_ssd	= @"NAND CH";
 			}
 
 			// categorize sensor
-			if ([sensor matchesRegex:regex_cpu_die]) {
+			if ([sensor matchesPrefix:pre_pmu1]) {
 				[_s_cpu_die addObject:sensor];
 				
 			} else if ([sensor matchesPrefix:pre_batt]) {
@@ -158,7 +156,7 @@ static NSString *pre_ssd	= @"NAND CH";
 	double avg = 0.0;
 	for (TinySensor *sensor in array) {
 		double temp	= sensor.temperature;
-		if (temp > 0) {
+		if (temp > 0) {// ignore negative temps
 			avg += temp;
 		}
 	}
