@@ -91,19 +91,6 @@
 	[self updateStatusItemToolTip];
 }
 
-- (NSImage *)image:(NSImage *)img tintedWithColor:(NSColor *)tint {
-	NSImage *image = [img copy];
-	if (tint) {
-		[image setTemplate:NO];
-		[image lockFocus];
-		[tint set];
-		NSRect imageRect = {NSZeroPoint, [image size]};
-		NSRectFillUsingOperation(imageRect, NSCompositingOperationSourceIn);
-		[image unlockFocus];
-	}
-	return image;
-}
-
 //MARK: all temps menu
 - (void)menuWillOpen:(NSMenu *)menu {
 	if (menu == self.allTempsMenu) {
