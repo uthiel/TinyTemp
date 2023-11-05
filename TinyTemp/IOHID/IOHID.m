@@ -70,7 +70,7 @@ static NSString *pre_pmu1	= @"PMU tdie";
 }
 
 - (NSString *)nameAndTemperature {
-	return [NSString stringWithFormat:@"%-12s %.1fºC", self.name.UTF8String, self.temperature];
+	return [NSString stringWithFormat:@"%-12s %.1fºC", self.prettyName.UTF8String, self.temperature];
 }
 
 - (BOOL)matchesPrefix:(NSString *)prefix {
