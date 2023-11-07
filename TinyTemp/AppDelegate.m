@@ -7,6 +7,7 @@
 
 #import "AppDelegate.h"
 #import "IOHID/IOHID.h"
+#import "UTStatusItemViewController.h"
 #import <ServiceManagement/ServiceManagement.h>
 
 @interface AppDelegate () <NSMenuDelegate>
@@ -32,6 +33,11 @@
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+	
+	// show initial popover
+	UTStatusItemViewController *vc	= [UTStatusItemViewController.alloc initWithStatusItem:self.statusItem];
+	[vc showPopover];
+	
 	// update lal
 	[self updateLaunchAtLoginMenuItem];
 	
