@@ -80,13 +80,10 @@ static NSString *pre_pmu1	= @"PMU tdie";
 
 
 //MARK: - IOHID
-@interface IOHID()
-@property( nonatomic, readwrite, assign, nullable ) IOHIDEventSystemClientRef client;
-@property NSArray *sensors_all, *sensors_cpu_die, *sensors_SSD, *sensors_Battery;
-@end
-
-
-@implementation IOHID
+@implementation IOHID {
+	IOHIDEventSystemClientRef client;
+	NSArray *sensors_other, *sensors_pmu_die, *sensors_SSD, *sensors_Battery, *sensors_all;
+}
 
 + (IOHID *)shared {
     static dispatch_once_t once;
@@ -100,53 +97,55 @@ static NSString *pre_pmu1	= @"PMU tdie";
 
 - (instancetype)init {
     if ((self = [super init])) {
-		NSMutableArray *_s_all		= NSMutableArray.array;
-		NSMutableArray *_s_cpu_die	= NSMutableArray.array;
-		NSMutableArray *_s_SSD		= NSMutableArray.array;
-		NSMutableArray *_s_Battery	= NSMutableArray.array;
+		NSMutableArray *s_other		= NSMutableArray.array;
+		NSMutableArray *s_cpu_die	= NSMutableArray.array;
+		NSMutableArray *s_SSD		= NSMutableArray.array;
+		NSMutableArray *s_Battery	= NSMutableArray.array;
+		NSMutableArray *s_all		= NSMutableArray.array;
 		
 		// get services
-		self.client			= IOHIDEventSystemClientCreate(kCFAllocatorDefault);
-		NSArray *services	= CFBridgingRelease(IOHIDEventSystemClientCopyServices(self.client));
+		client				= IOHIDEventSystemClientCreate(kCFAllocatorDefault);
+		NSArray *services	= CFBridgingRelease(IOHIDEventSystemClientCopyServices(client));
 		
-		// find temperature sensors
-		
+		// enumerate and classify sensors
 		for (id o in services) {
 			IOHIDServiceClientRef service	= (__bridge IOHIDServiceClientRef)o;
 			TinySensor *sensor				= [TinySensor.alloc initWithService:service];
 			
-			// add sensor to all
 			if (sensor) {
-				[_s_all addObject:sensor];
-			}
+				[s_all addObject:sensor];
+				
+				if ([sensor matchesPrefix:pre_pmu1]) {
+					[s_cpu_die addObject:sensor];
+					
+				} else if ([sensor matchesPrefix:pre_batt]) {
+					[s_Battery addObject:sensor];
+					
+				} else if ([sensor matchesPrefix:pre_ssd]) {
+					[s_SSD addObject:sensor];
 
-			// categorize sensor
-			if ([sensor matchesPrefix:pre_pmu1]) {
-				[_s_cpu_die addObject:sensor];
-				
-			} else if ([sensor matchesPrefix:pre_batt]) {
-				[_s_Battery addObject:sensor];
-				
-			} else if ([sensor matchesPrefix:pre_ssd]) {
-				[_s_SSD addObject:sensor];
+				} else {
+					[s_other addObject:sensor];
+				}
 			}
 		}
 		// sort arrays
 		NSSortDescriptor *d = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
-		for (NSMutableArray *a in @[_s_all,_s_SSD, _s_cpu_die, _s_Battery]) {
+		for (NSMutableArray *a in @[s_other, s_SSD, s_cpu_die, s_Battery, s_all]) {
 			[a sortUsingDescriptors:@[d]];
 		}
 		// make arrays immutable
-		_sensors_all		= [NSArray arrayWithArray:_s_all];
-		_sensors_cpu_die	= [NSArray arrayWithArray:_s_cpu_die];
-		_sensors_SSD		= [NSArray arrayWithArray:_s_SSD];
-		_sensors_Battery	= [NSArray arrayWithArray:_s_Battery];
+		sensors_other	= [NSArray arrayWithArray:s_other];
+		sensors_pmu_die	= [NSArray arrayWithArray:s_cpu_die];
+		sensors_SSD		= [NSArray arrayWithArray:s_SSD];
+		sensors_Battery	= [NSArray arrayWithArray:s_Battery];
+		sensors_all		= [NSArray arrayWithArray:s_all];
     }
     return self;
 }
 
 - (NSString *)description {
-	return [NSString stringWithFormat:@"CPU=%@ SSD=%@ Batt=%@ All=%@", _sensors_cpu_die, _sensors_SSD, _sensors_Battery, _sensors_all];
+	return [NSString stringWithFormat:@"PMU=%@ SSD=%@ Batt=%@ Other=%@", sensors_pmu_die, sensors_SSD, sensors_Battery, sensors_other];
 }
 
 - (double)avgForArray:(NSArray *)array {
@@ -165,17 +164,17 @@ static NSString *pre_pmu1	= @"PMU tdie";
 	return avg;
 }
 
-- (float)readCPUTemperature {
-	return [self avgForArray:_sensors_cpu_die];
+- (float)readPMUTemperature {
+	return [self avgForArray:sensors_pmu_die];
 }
 - (float)readSSDTemperature {
-	return [self avgForArray:_sensors_SSD];
+	return [self avgForArray:sensors_SSD];
 }
 - (float)readBatteryTemperature {
-	return [self avgForArray:_sensors_Battery];
+	return [self avgForArray:sensors_Battery];
 }
 
 - (NSArray<TinySensor *> *)allSensors {
-	return _sensors_all;
+	return sensors_all;
 }
 @end

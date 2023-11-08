@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)init;
 
 - (float)readBatteryTemperature;
-- (float)readCPUTemperature;
+- (float)readPMUTemperature;
 - (float)readSSDTemperature;
 
 - (NSArray <TinySensor*> *)allSensors;

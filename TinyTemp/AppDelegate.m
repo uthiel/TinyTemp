@@ -85,7 +85,7 @@
 	self.statusItem.button.toolTip	= [NSString stringWithFormat:@"CPU:%@ SSD:%@ Batt:%@", cpu, ssd, batt];
 }
 - (void)updateCPU:(NSTimer *)timer {
-	temp_cpu	= [iohid readCPUTemperature];
+	temp_cpu	= [iohid readPMUTemperature];
 	self.statusItem.button.title	= [self formattedTempForTemp:temp_cpu];
 	[self updateStatusItemToolTip];
 }
