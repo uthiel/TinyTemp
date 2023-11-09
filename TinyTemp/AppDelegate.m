@@ -29,6 +29,7 @@
 	_statusItem.behavior				= NSStatusItemBehaviorTerminationOnRemoval;
 	_statusItem.button.imagePosition	= NSImageLeft;
 	_statusItem.menu					= self.statusItemMenu;
+	_statusItem.button.font				= [NSFont monospacedSystemFontOfSize:-1.0 weight:NSFontWeightRegular];
 	_statusItem.button.title			= [NSBundle.mainBundle objectForInfoDictionaryKey:(__bridge NSString*)kCFBundleNameKey];
 }
 
