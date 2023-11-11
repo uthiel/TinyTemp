@@ -16,7 +16,9 @@ extern double                    	IOHIDEventGetFloatValue(CFTypeRef, int64_t);
 
 static NSString *pre_batt	= @"gas gauge battery";
 static NSString *pre_ssd	= @"NAND CH";
-static NSString *pre_pmu1	= @"PMU tdie";
+static NSString *pre_pmu_1	= @"PMU tdie";
+static NSString *pre_pmu_2	= @"PMU2 tdie";
+static NSString *pre_pmu_tp	= @"PMU TP";
 
 
 //MARK: - TinySensor
@@ -25,17 +27,22 @@ static NSString *pre_pmu1	= @"PMU tdie";
 }
 
 - (instancetype)initWithService:(IOHIDServiceClientRef)service {
+	
 	CFTypeRef event		= IOHIDServiceClientCopyEvent(service, IOHIDEventTypeTemperature, 0, 0);
 	NSString *sensor	= CFBridgingRelease(IOHIDServiceClientCopyProperty(service, CFSTR(kIOHIDProductKey)));
 	
 	if (sensor != nil && event != nil) {
-		self = [super init];
+		self 		= [super init];
 		_service	= service;
 		_name		= sensor;
 		_prettyName	= _name.copy;
-		if ([self matchesPrefix:pre_batt]) {
-			_prettyName	= @"Battery";
-		} else if ([self matchesPrefix:pre_ssd]) {
+		NSNumber *c	= IOHIDServiceClientGetRegistryID(service);
+		_clientID	= [NSString stringWithFormat:@"%llX", c.unsignedLongLongValue];
+		
+		if ([self isBattery]) {
+			_prettyName	= [@"Battery #" stringByAppendingString:_clientID];
+			
+		} else if ([self isSSD]) {
 			// convert "NAND CH0 temp" to "SSD %0"
 			NSString *pattern			= [NSString stringWithFormat:@"^%@(\\d) .*", pre_ssd];
 			NSRegularExpression *reg	= [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
@@ -54,19 +61,27 @@ static NSString *pre_pmu1	= @"PMU tdie";
 	}
 }
 
+-(void)dealloc {
+//	NSLog(@"Dealloc: %@", self);
+}
+
 - (NSString *)description {
-	return [NSString stringWithFormat:@"%@ : %f C", self.name, self.temperature];
+	return [NSString stringWithFormat:@"sel=%u id=%@ %@ : %f C", self.selected, self.clientID, self.name, self.temperature];
 }
 
 - (double)temperature {
 	static int64_t IOHIDEventFieldTemperatureLevel = IOHIDEventFieldBase(IOHIDEventTypeTemperature);
 	
-	CFTypeRef event	= IOHIDServiceClientCopyEvent(_service, IOHIDEventTypeTemperature, 0, 0);
-	double value	= IOHIDEventGetFloatValue(event, IOHIDEventFieldTemperatureLevel);
-
-	if (event) CFRelease(event);
-
-	return value;;
+	if (_service) {
+		CFTypeRef event	= IOHIDServiceClientCopyEvent(_service, IOHIDEventTypeTemperature, 0, 0);
+		double value	= IOHIDEventGetFloatValue(event, IOHIDEventFieldTemperatureLevel);
+		
+		if (event) CFRelease(event);
+		
+		return value;;
+	} else {
+		return -1.0;;
+	}
 }
 
 - (NSString *)nameAndTemperature {
@@ -76,13 +91,16 @@ static NSString *pre_pmu1	= @"PMU tdie";
 - (BOOL)matchesPrefix:(NSString *)prefix {
 	return [self.name hasPrefix:prefix];
 }
+- (BOOL)isCPU		{ return [self matchesPrefix:pre_pmu_1] ||[self matchesPrefix:pre_pmu_2] || [self matchesPrefix:pre_pmu_tp];}
+- (BOOL)isSSD		{ return [self matchesPrefix:pre_ssd];}
+- (BOOL)isBattery	{ return [self matchesPrefix:pre_batt];}
 @end
 
 
 //MARK: - IOHID
 @implementation IOHID {
 	IOHIDEventSystemClientRef client;
-	NSArray *sensors_other, *sensors_pmu_die, *sensors_SSD, *sensors_Battery, *sensors_all;
+	NSArray *sensors_other, *sensors_cpu, *sensors_SSD, *sensors_Battery, *sensors_all;
 }
 
 + (IOHID *)shared {
@@ -97,11 +115,11 @@ static NSString *pre_pmu1	= @"PMU tdie";
 
 - (instancetype)init {
     if ((self = [super init])) {
-		NSMutableArray *s_other		= NSMutableArray.array;
-		NSMutableArray *s_cpu_die	= NSMutableArray.array;
+		NSMutableArray *s_cpu		= NSMutableArray.array;
 		NSMutableArray *s_SSD		= NSMutableArray.array;
 		NSMutableArray *s_Battery	= NSMutableArray.array;
 		NSMutableArray *s_all		= NSMutableArray.array;
+		NSMutableArray *s_other		= NSMutableArray.array;
 		
 		// get services
 		client				= IOHIDEventSystemClientCreate(kCFAllocatorDefault);
@@ -115,13 +133,13 @@ static NSString *pre_pmu1	= @"PMU tdie";
 			if (sensor) {
 				[s_all addObject:sensor];
 				
-				if ([sensor matchesPrefix:pre_pmu1]) {
-					[s_cpu_die addObject:sensor];
+				if ([sensor isCPU]) {
+					[s_cpu addObject:sensor];
 					
-				} else if ([sensor matchesPrefix:pre_batt]) {
+				} else if ([sensor isBattery]) {
 					[s_Battery addObject:sensor];
 					
-				} else if ([sensor matchesPrefix:pre_ssd]) {
+				} else if ([sensor isSSD]) {
 					[s_SSD addObject:sensor];
 
 				} else {
@@ -130,13 +148,15 @@ static NSString *pre_pmu1	= @"PMU tdie";
 			}
 		}
 		// sort arrays
-		NSSortDescriptor *d = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
-		for (NSMutableArray *a in @[s_other, s_SSD, s_cpu_die, s_Battery, s_all]) {
-			[a sortUsingDescriptors:@[d]];
+		NSSortDescriptor *d1 = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+		NSSortDescriptor *d2 = [NSSortDescriptor sortDescriptorWithKey:@"clientID" ascending:YES];
+		
+		for (NSMutableArray *a in @[s_other, s_SSD, s_cpu, s_Battery, s_all]) {
+			[a sortUsingDescriptors:@[d1, d2]];
 		}
 		// make arrays immutable
 		sensors_other	= [NSArray arrayWithArray:s_other];
-		sensors_pmu_die	= [NSArray arrayWithArray:s_cpu_die];
+		sensors_cpu		= [NSArray arrayWithArray:s_cpu];
 		sensors_SSD		= [NSArray arrayWithArray:s_SSD];
 		sensors_Battery	= [NSArray arrayWithArray:s_Battery];
 		sensors_all		= [NSArray arrayWithArray:s_all];
@@ -145,36 +165,40 @@ static NSString *pre_pmu1	= @"PMU tdie";
 }
 
 - (NSString *)description {
-	return [NSString stringWithFormat:@"PMU=%@ SSD=%@ Batt=%@ Other=%@", sensors_pmu_die, sensors_SSD, sensors_Battery, sensors_other];
+	return [NSString stringWithFormat:@"PMU=%@ SSD=%@ Batt=%@ Other=%@", sensors_cpu, sensors_SSD, sensors_Battery, sensors_other];
 }
 
 - (double)avgForArray:(NSArray *)array {
+	
 	if (array.count == 0) {
+//		NSLog(@"Array count is zero");
 		return -1.0;
 	}
-	double avg = 0.0;
+	
+	double sum			= 0.0;
+	NSUInteger count	= 0;
+	
 	for (TinySensor *sensor in array) {
-		double temp	= sensor.temperature;
-		if (temp > 0) {// ignore negative temps
-			avg += temp;
+		if (sensor.selected) {
+			double temp	= sensor.temperature;
+			sum += temp;
+			count++;
 		}
 	}
-	avg = avg / array.count;
 	
-	return avg;
+	if (count) {
+		return sum / count;
+	}
+//	NSLog(@"No object selected");
+	return -1.0;
 }
 
-- (float)readPMUTemperature {
-	return [self avgForArray:sensors_pmu_die];
-}
-- (float)readSSDTemperature {
-	return [self avgForArray:sensors_SSD];
-}
-- (float)readBatteryTemperature {
-	return [self avgForArray:sensors_Battery];
-}
+- (float)readPMUTemperature 	{ return [self avgForArray:sensors_cpu];}
+- (float)readSSDTemperature 	{ return [self avgForArray:sensors_SSD];}
+- (float)readBatteryTemperature	{ return [self avgForArray:sensors_Battery];}
 
-- (NSArray<TinySensor *> *)allSensors {
-	return sensors_all;
-}
+- (NSArray<TinySensor *> *)allSensors	{ return sensors_all;}
+- (NSArray<TinySensor *> *)cpuSensors	{ return sensors_cpu;}
+- (NSArray<TinySensor *> *)ssdSensors	{ return sensors_SSD;}
+- (NSArray<TinySensor *> *)battSensors	{ return sensors_Battery;}
 @end

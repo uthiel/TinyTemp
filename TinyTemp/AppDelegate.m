@@ -10,17 +10,24 @@
 #import "UTStatusItemViewController.h"
 #import <ServiceManagement/ServiceManagement.h>
 
+
+// user defaults keys
+static NSString *def_sensor_selection	= @"sensor_selection";
+
+
+// MARK: - AppDeleghate
 @interface AppDelegate () <NSMenuDelegate>
 @property IBOutlet NSMenu *statusItemMenu;
-@property IBOutlet NSMenu *allTempsMenu;
+@property IBOutlet NSMenu *cpuMenu, *ssdMenu, *battMenu;
 @property IBOutlet NSMenuItem *lal;
 @property (readonly) NSStatusItem * _Nonnull statusItem;
 @end
 
 @implementation AppDelegate {
 	IOHID *iohid;
-	NSTimer *timer_cpu, *timer_ssd, *timer_batt, *timer_all;
-	double temp_cpu, temp_ssd, temp_batt;
+	NSTimer *timer_cpu, *timer_ssd, *timer_batt;
+	double    temp_cpu,   temp_ssd,   temp_batt;
+	BOOL    update_cpu, update_ssd, update_batt;
 }
 
 - (void)awakeFromNib {
@@ -30,7 +37,7 @@
 	_statusItem.button.imagePosition	= NSImageLeft;
 	_statusItem.menu					= self.statusItemMenu;
 	_statusItem.button.font				= [NSFont monospacedSystemFontOfSize:-1.0 weight:NSFontWeightRegular];
-	_statusItem.button.title			= [NSBundle.mainBundle objectForInfoDictionaryKey:(__bridge NSString*)kCFBundleNameKey];
+	_statusItem.button.title			= @"-";
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
@@ -45,37 +52,80 @@
 	// start sensor singleton
 	iohid = IOHID.shared;
 	
-	// update StatusItem immediately
-	[self updateCPU:nil];
-	[self updateSSD:nil];
-	[self updateBatt:nil];
+	// populate sensor selection with reasonable defaults at first launch
+	NSSet *selections	= [self userDefaultSensorSelections];
+	if (!selections || !selections.count) {
+		[(TinySensor *) iohid.cpuSensors.firstObject  setSelected:YES];
+		[(TinySensor *) iohid.ssdSensors.firstObject  setSelected:YES];
+		[(TinySensor *) iohid.battSensors.firstObject setSelected:YES];
+		
+		[self writeUserDefaultsSensorSelection];
+	}
 	
 	// start cpu timer
 	timer_cpu			= [NSTimer timerWithTimeInterval:5.0 target:self selector:@selector(updateCPU:) userInfo:nil repeats:YES];
-	[[NSRunLoop currentRunLoop] addTimer:timer_cpu forMode:NSRunLoopCommonModes];
+	[[NSRunLoop currentRunLoop] addTimer:timer_cpu forMode:NSRunLoopCommonModes];// required for menu items to update while a menu is open
 	timer_cpu.tolerance	= 1.0;
 	// start ssd timer
-	timer_ssd			= [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(updateSSD:) userInfo:nil repeats:YES];
-	timer_cpu.tolerance	= 1.0;
+	timer_ssd			= [NSTimer timerWithTimeInterval:30.0 target:self selector:@selector(updateSSD:) userInfo:nil repeats:YES];
+	[[NSRunLoop currentRunLoop] addTimer:timer_ssd forMode:NSRunLoopCommonModes];// required for menu items to update while a menu is open
+	timer_ssd.tolerance	= 1.0;
 	// start batt timer
-	timer_batt			= [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(updateSSD:) userInfo:nil repeats:YES];
+	timer_batt			= [NSTimer timerWithTimeInterval:30.0 target:self selector:@selector(updateBatt:) userInfo:nil repeats:YES];
+	[[NSRunLoop currentRunLoop] addTimer:timer_batt forMode:NSRunLoopCommonModes];// required for menu items to update while a menu is open
 	timer_batt.tolerance= 1.0;
 	
-	// populate all temps menu
-	self.allTempsMenu.font	= [NSFont monospacedSystemFontOfSize:-1.0 weight:NSFontWeightRegular];
+	// populate cpu/ssd/batt menus
+	[self configureMenu:self.cpuMenu  withSensorArray:iohid.cpuSensors ];
+	[self configureMenu:self.ssdMenu  withSensorArray:iohid.ssdSensors ];
+	[self configureMenu:self.battMenu withSensorArray:iohid.battSensors];
 	
-	for (TinySensor *sensor in [iohid allSensors]) {
-		NSMenuItem *item 		= [self.allTempsMenu addItemWithTitle:sensor.nameAndTemperature action:@selector(allTempAction:) keyEquivalent:@""];
+	// update StatusItem after selections have been read from user defaults
+	[self updateCPU:nil];
+	[self updateSSD:nil];
+	[self updateBatt:nil];
+}
+
+- (void)configureMenu:(NSMenu *)menu withSensorArray:(NSArray *)array {
+	menu.font		= [NSFont monospacedSystemFontOfSize:-1.0 weight:NSFontWeightRegular];
+	menu.delegate	= self;
+	
+	NSSet *selections	= [self userDefaultSensorSelections];
+	
+	for (TinySensor *sensor in array) {
+		for (NSString *clientID in selections) {
+			if ([sensor.clientID isEqualToString:clientID]) {
+				sensor.selected	= YES;
+			}
+		}
+		NSMenuItem *item 		= [menu addItemWithTitle:sensor.nameAndTemperature action:@selector(toggleSensor:) keyEquivalent:@""];
 		item.representedObject	= sensor;
+		[item bind:NSValueBinding toObject:sensor withKeyPath:@"selected" options:nil];
 	}
 }
 
 - (NSString *)formattedTempForTemp:(double)temp {
-	if (temp < 0.0) {
+	if (temp < 0.0) {// will be negative if sensor count is 0
 		return @"-";
 	} else {
 		return [NSString stringWithFormat:@"%.0fºC", round(temp)];
 	}
+}
+
+//MARK: Sensor Selection User Defaults
+- (NSSet <NSString *>*)userDefaultSensorSelections {
+	NSArray *selections	= [NSUserDefaults.standardUserDefaults objectForKey:def_sensor_selection];
+	return [NSSet setWithArray:selections];
+}
+- (void)writeUserDefaultsSensorSelection {
+	NSMutableSet *selections = NSMutableSet.set;
+	for (TinySensor *sensor in self->iohid.allSensors) {
+		if (sensor.selected) {
+			[selections addObject:sensor.clientID];
+		}
+	}
+	NSArray *array	= [selections sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:nil ascending:YES]]];
+	[NSUserDefaults.standardUserDefaults setObject:array forKey:def_sensor_selection];
 }
 
 //MARK: StatusItem Updates
@@ -83,42 +133,63 @@
 	NSString *cpu	= self.statusItem.button.title;
 	NSString *ssd	= [self formattedTempForTemp:temp_ssd];
 	NSString *batt	= [self formattedTempForTemp:temp_batt];
+	
 	self.statusItem.button.toolTip	= [NSString stringWithFormat:@"CPU:%@ SSD:%@ Batt:%@", cpu, ssd, batt];
 }
 - (void)updateCPU:(NSTimer *)timer {
-	temp_cpu	= [iohid readPMUTemperature];
+	temp_cpu						= [iohid readPMUTemperature];
 	self.statusItem.button.title	= [self formattedTempForTemp:temp_cpu];
 	[self updateStatusItemToolTip];
+	
+	if (update_cpu) {
+		[self updateSensorMenu:self.cpuMenu];
+	}
 }
 - (void)updateSSD:(NSTimer *)timer {
 	temp_ssd = [iohid readSSDTemperature];
 	[self updateStatusItemToolTip];
+	
+	if (update_ssd) {
+		[self updateSensorMenu:self.ssdMenu];
+	}
 }
 - (void)updateBatt:(NSTimer *)timer {
 	temp_batt = [iohid readBatteryTemperature];
 	[self updateStatusItemToolTip];
+	
+	if (update_batt) {
+		[self updateSensorMenu:self.battMenu];
+	}
 }
 
-//MARK: all temps menu
+//MARK: all cpu/ssd/batt menus
 - (void)menuWillOpen:(NSMenu *)menu {
-	if (menu == self.allTempsMenu) {
-		// timer has to run in NSEventTrackingRunLoopMode for real-time NSMenu updates
-		timer_all = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(updateAllTemps:) userInfo:nil repeats:YES];
-		[[NSRunLoop currentRunLoop] addTimer:timer_all forMode:NSEventTrackingRunLoopMode];
-	}
+	if (menu == self.cpuMenu ) { update_cpu		= YES;}
+	if (menu == self.ssdMenu ) { update_ssd		= YES;}
+	if (menu == self.battMenu) { update_batt	= YES;}
 }
 - (void)menuDidClose:(NSMenu *)menu {
-	if (menu == self.allTempsMenu) {
-		[timer_all invalidate];
+	if (menu == self.cpuMenu ) { update_cpu		= NO;}
+	if (menu == self.ssdMenu ) { update_ssd		= NO;}
+	if (menu == self.battMenu) { update_batt	= NO;}
+}
+- (void)updateSensorMenu:(NSMenu *)menu {
+	for (NSMenuItem *item in menu.itemArray) {
+		if ([item.representedObject isKindOfClass:TinySensor.class]) {
+			TinySensor *sensor	= (TinySensor *)item.representedObject;
+			item.title			= sensor.nameAndTemperature;
+		}
 	}
 }
-- (void)updateAllTemps:(NSTimer *)timer {
-	for (NSMenuItem *item in self.allTempsMenu.itemArray) {
-		item.title	= [item.representedObject nameAndTemperature];
-	}
-}
-- (void)allTempAction:(NSMenuItem *)item {
-	// empty action to enable all Temp menu items
+- (void)toggleSensor:(NSMenuItem *)item {
+	// at this point, item.state isn't toggled yet, therefore we need to wait for the next run loop
+	[NSOperationQueue.mainQueue addOperationWithBlock:^{
+		// this block will be executed after item.state has been toggled
+		[self updateCPU:nil];
+		[self updateStatusItemToolTip];
+		// write clientIDs of selected sensors to user defaults
+		[self writeUserDefaultsSensorSelection];
+	}];
 }
 
 //MARK: Launch at Login

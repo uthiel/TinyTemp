@@ -14,7 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 //MARK: - TinySensor
 @interface TinySensor : NSObject
 
-@property (copy) NSString *name, *prettyName;
+@property (copy, readonly) NSString *name, *prettyName, *clientID;
+@property BOOL selected;
+
 
 - (instancetype)initWithService:(IOHIDServiceClientRef)service;
 - (double)temperature;
@@ -34,6 +36,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (float)readSSDTemperature;
 
 - (NSArray <TinySensor*> *)allSensors;
+- (NSArray <TinySensor*> *)cpuSensors;
+- (NSArray <TinySensor*> *)ssdSensors;
+- (NSArray <TinySensor*> *)battSensors;
 @end
 
 NS_ASSUME_NONNULL_END
