@@ -1,6 +1,8 @@
 #  TinyTemp
 A simple low-resource temperature monitoring app for the menu bar.
 
+![TinyTemp](TinyTemp.png)
+
 ## Why another temperature monitor?
 TinyTemp aims at using the lowest possible amount of resources. 
 This goal is achieved by sticking to the bare minimum amount of data read from the system, 
@@ -12,7 +14,7 @@ This results in a typical CPU load of less then 0.2%.
 
 ## Installation
 ### Install binary
-The release includes a binary that is notarised by Apple. It has to be placed in the `Applications` folder.
+The release includes a binary that is notarised by Apple. It has to be placed in the `/Applications` folder.
 
 ### Install from source
 Use Github's `Open in Xcode` feature to fetch one of the current branches, or download a `zip` file from one of the releases. 
