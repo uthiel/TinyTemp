@@ -9,6 +9,7 @@ This goal is achieved by sticking to the bare minimum amount of data read from t
 as well as trying to be as efficient as possible in handling the data and presenting it to the user. 
 
 Therefore, only the CPU temperature is displayed in the status item, with SSD and Battery temperatures added to the tooltip.
+Temperatures are averaged over the selected sensors.
 
 This results in a typical CPU load of less then 0.2%.
 
