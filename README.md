@@ -1,7 +1,7 @@
 #  TinyTemp
 A simple low-resource temperature monitoring app for the menu bar.
 
-![TinyTemp](TinyTemp.png)
+![TinyTemp](assets/TinyTemp.png)
 
 ## Why another temperature monitor?
 TinyTemp aims at using the lowest possible amount of resources. 
