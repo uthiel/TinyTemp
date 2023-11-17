@@ -8,21 +8,10 @@
 #import <Foundation/Foundation.h>
 #import <IOKit/hidsystem/IOHIDEventSystemClient.h>
 #import <IOKit/hidsystem/IOHIDServiceClient.h>
+@class TinySensor;
+
 
 NS_ASSUME_NONNULL_BEGIN
-
-//MARK: - TinySensor
-@interface TinySensor : NSObject
-
-@property (copy, readonly) NSString *name, *prettyName, *clientID;
-@property BOOL selected;
-
-
-- (instancetype)initWithService:(IOHIDServiceClientRef)service;
-- (double)temperature;
-- (NSString *)nameAndTemperature;
-@end
-
 
 //MARK: - IOHID
 @interface IOHID: NSObject

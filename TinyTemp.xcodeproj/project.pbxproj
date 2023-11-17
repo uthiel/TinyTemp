@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C67DCC42B07442D00BA422B /* TinySensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C67DCC32B07442D00BA422B /* TinySensor.m */; };
+		4C67DCC52B07475B00BA422B /* TinySensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C67DCC32B07442D00BA422B /* TinySensor.m */; };
 		4C9600952AFA50CA00E08EBA /* NSBundle+ut.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9600922AFA50CA00E08EBA /* NSBundle+ut.m */; };
 		4C9600962AFA50CA00E08EBA /* UTStatusItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9600932AFA50CA00E08EBA /* UTStatusItemViewController.m */; };
 		4CC15CB12AECED03005150EC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC15CB02AECED03005150EC /* AppDelegate.m */; };
@@ -31,6 +33,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C67DCC22B07442D00BA422B /* TinySensor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TinySensor.h; sourceTree = "<group>"; };
+		4C67DCC32B07442D00BA422B /* TinySensor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TinySensor.m; sourceTree = "<group>"; };
 		4C9600912AFA50CA00E08EBA /* UTStatusItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UTStatusItemViewController.h; path = ../../_myStuff/UTStatusItemViewController.h; sourceTree = "<group>"; };
 		4C9600922AFA50CA00E08EBA /* NSBundle+ut.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSBundle+ut.m"; path = "../../_myStuff/NSBundle+ut.m"; sourceTree = "<group>"; };
 		4C9600932AFA50CA00E08EBA /* UTStatusItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTStatusItemViewController.m; path = ../../_myStuff/UTStatusItemViewController.m; sourceTree = "<group>"; };
@@ -93,6 +97,8 @@
 		4CC15CAE2AECED03005150EC /* TinyTemp */ = {
 			isa = PBXGroup;
 			children = (
+				4C67DCC22B07442D00BA422B /* TinySensor.h */,
+				4C67DCC32B07442D00BA422B /* TinySensor.m */,
 				4C9600942AFA50CA00E08EBA /* NSBundle+ut.h */,
 				4C9600922AFA50CA00E08EBA /* NSBundle+ut.m */,
 				4C9600912AFA50CA00E08EBA /* UTStatusItemViewController.h */,
@@ -228,6 +234,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CC15CB82AECED03005150EC /* main.m in Sources */,
+				4C67DCC42B07442D00BA422B /* TinySensor.m in Sources */,
 				4CC15CB12AECED03005150EC /* AppDelegate.m in Sources */,
 				4CC15CCE2AED072C005150EC /* IOHID.m in Sources */,
 				4C9600962AFA50CA00E08EBA /* UTStatusItemViewController.m in Sources */,
@@ -240,6 +247,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CC15CE12AF1269B005150EC /* IOHID.m in Sources */,
+				4C67DCC52B07475B00BA422B /* TinySensor.m in Sources */,
 				4CC15CDD2AF12511005150EC /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -382,7 +390,7 @@
 				CODE_SIGN_ENTITLEMENTS = TinyTemp/TinyTemp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = B42PBJA6QF;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -395,7 +403,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.41;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.udo-thiel.TinyTemp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -411,7 +419,7 @@
 				CODE_SIGN_ENTITLEMENTS = TinyTemp/TinyTemp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = B42PBJA6QF;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -424,7 +432,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.41;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.udo-thiel.TinyTemp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -7,12 +7,13 @@
 
 #import "AppDelegate.h"
 #import "IOHID/IOHID.h"
+#import "TinySensor.h"
 #import "UTStatusItemViewController.h"
 #import <ServiceManagement/ServiceManagement.h>
 
 
 // user defaults keys
-static NSString *def_sensor_selection	= @"sensor_selection";
+static NSString *def_sensor_selection	= @"sensor_selection_2";
 
 
 // MARK: - AppDeleghate
@@ -93,8 +94,8 @@ static NSString *def_sensor_selection	= @"sensor_selection";
 	NSSet *selections	= [self userDefaultSensorSelections];
 	
 	for (TinySensor *sensor in array) {
-		for (NSString *clientID in selections) {
-			if ([sensor.clientID isEqualToString:clientID]) {
+		for (NSString *locationID in selections) {
+			if ([sensor.locationID isEqualToString:locationID]) {
 				sensor.selected	= YES;
 			}
 		}
@@ -121,7 +122,7 @@ static NSString *def_sensor_selection	= @"sensor_selection";
 	NSMutableSet *selections = NSMutableSet.set;
 	for (TinySensor *sensor in self->iohid.allSensors) {
 		if (sensor.selected) {
-			[selections addObject:sensor.clientID];
+			[selections addObject:sensor.locationID];
 		}
 	}
 	NSArray *array	= [selections sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:nil ascending:YES]]];
