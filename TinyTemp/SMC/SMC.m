@@ -25,6 +25,12 @@
 #import "SMC.h"
 #import "SMC-Internal.h"
 
+/*
+ List of keys:
+ https://github.com/exelban/stats/blob/master/Modules/Sensors/values.swift
+ https://github.com/tonyarnold/VirtualSMC/blob/master/Docs/SMCSensorKeys.txt
+ */
+
 const uint32_t kSMCKeyNKEY = '#KEY';
 const uint32_t kSMCKeyACID = 'ACID';
 
