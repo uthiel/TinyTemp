@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C1465552B2BDE69006E1C54 /* NSBundle+ut.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1465522B2BDE69006E1C54 /* NSBundle+ut.m */; };
+		4C1465562B2BDE69006E1C54 /* UTStatusItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1465532B2BDE69006E1C54 /* UTStatusItemViewController.m */; };
 		4C67DCC42B07442D00BA422B /* TinySensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C67DCC32B07442D00BA422B /* TinySensor.m */; };
 		4C67DCC52B07475B00BA422B /* TinySensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C67DCC32B07442D00BA422B /* TinySensor.m */; };
-		4C9600952AFA50CA00E08EBA /* NSBundle+ut.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9600922AFA50CA00E08EBA /* NSBundle+ut.m */; };
-		4C9600962AFA50CA00E08EBA /* UTStatusItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9600932AFA50CA00E08EBA /* UTStatusItemViewController.m */; };
 		4CC15CB12AECED03005150EC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC15CB02AECED03005150EC /* AppDelegate.m */; };
 		4CC15CB32AECED03005150EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CC15CB22AECED03005150EC /* Assets.xcassets */; };
 		4CC15CB62AECED03005150EC /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC15CB42AECED03005150EC /* MainMenu.xib */; };
@@ -33,12 +33,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C1465512B2BDE69006E1C54 /* NSBundle+ut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+ut.h"; sourceTree = "<group>"; };
+		4C1465522B2BDE69006E1C54 /* NSBundle+ut.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+ut.m"; sourceTree = "<group>"; };
+		4C1465532B2BDE69006E1C54 /* UTStatusItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UTStatusItemViewController.m; sourceTree = "<group>"; };
+		4C1465542B2BDE69006E1C54 /* UTStatusItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UTStatusItemViewController.h; sourceTree = "<group>"; };
 		4C67DCC22B07442D00BA422B /* TinySensor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TinySensor.h; sourceTree = "<group>"; };
 		4C67DCC32B07442D00BA422B /* TinySensor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TinySensor.m; sourceTree = "<group>"; };
-		4C9600912AFA50CA00E08EBA /* UTStatusItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UTStatusItemViewController.h; path = ../../_myStuff/UTStatusItemViewController.h; sourceTree = "<group>"; };
-		4C9600922AFA50CA00E08EBA /* NSBundle+ut.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSBundle+ut.m"; path = "../../_myStuff/NSBundle+ut.m"; sourceTree = "<group>"; };
-		4C9600932AFA50CA00E08EBA /* UTStatusItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTStatusItemViewController.m; path = ../../_myStuff/UTStatusItemViewController.m; sourceTree = "<group>"; };
-		4C9600942AFA50CA00E08EBA /* NSBundle+ut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSBundle+ut.h"; path = "../../_myStuff/NSBundle+ut.h"; sourceTree = "<group>"; };
 		4CA9B2BF2AF6A9B700B40821 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4CC15CAC2AECED03005150EC /* TinyTemp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinyTemp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CC15CAF2AECED03005150EC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -97,12 +97,12 @@
 		4CC15CAE2AECED03005150EC /* TinyTemp */ = {
 			isa = PBXGroup;
 			children = (
+				4C1465512B2BDE69006E1C54 /* NSBundle+ut.h */,
+				4C1465522B2BDE69006E1C54 /* NSBundle+ut.m */,
+				4C1465542B2BDE69006E1C54 /* UTStatusItemViewController.h */,
+				4C1465532B2BDE69006E1C54 /* UTStatusItemViewController.m */,
 				4C67DCC22B07442D00BA422B /* TinySensor.h */,
 				4C67DCC32B07442D00BA422B /* TinySensor.m */,
-				4C9600942AFA50CA00E08EBA /* NSBundle+ut.h */,
-				4C9600922AFA50CA00E08EBA /* NSBundle+ut.m */,
-				4C9600912AFA50CA00E08EBA /* UTStatusItemViewController.h */,
-				4C9600932AFA50CA00E08EBA /* UTStatusItemViewController.m */,
 				4CC15CE22AF22D99005150EC /* Info.plist */,
 				4CC15CCA2AED06D5005150EC /* IOHID */,
 				4CC15CBF2AECF0FE005150EC /* SMC */,
@@ -235,10 +235,10 @@
 			files = (
 				4CC15CB82AECED03005150EC /* main.m in Sources */,
 				4C67DCC42B07442D00BA422B /* TinySensor.m in Sources */,
+				4C1465562B2BDE69006E1C54 /* UTStatusItemViewController.m in Sources */,
+				4C1465552B2BDE69006E1C54 /* NSBundle+ut.m in Sources */,
 				4CC15CB12AECED03005150EC /* AppDelegate.m in Sources */,
 				4CC15CCE2AED072C005150EC /* IOHID.m in Sources */,
-				4C9600962AFA50CA00E08EBA /* UTStatusItemViewController.m in Sources */,
-				4C9600952AFA50CA00E08EBA /* NSBundle+ut.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
