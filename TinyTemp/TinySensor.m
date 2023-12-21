@@ -10,6 +10,8 @@
 extern CFTypeRef	IOHIDServiceClientCopyEvent(IOHIDServiceClientRef, int64_t, int64_t, int64_t);
 extern double   	IOHIDEventGetFloatValue(CFTypeRef, int64_t);
 
+NSInteger DegreeUnit;
+
 static NSString *pre_batt	= @"gas gauge battery";
 static NSString *pre_ssd	= @"NAND CH";
 static NSString *pre_pmu_1	= @"PMU tdie";
@@ -84,7 +86,11 @@ static NSString *pre_pmu_tp	= @"PMU TP";
 }
 
 - (NSString *)nameAndTemperature {
-	return [NSString stringWithFormat:@"%-12s %.1fºC", self.prettyName.UTF8String, self.temperature];
+    double tempTemp = self.temperature;
+    if('F' == DegreeUnit) {
+        tempTemp = (tempTemp * 1.8) + 32;
+    }
+	return [NSString stringWithFormat:@"%-12s %.1fº%c", self.prettyName.UTF8String, tempTemp, (int)DegreeUnit];
 }
 
 - (BOOL)matchesPrefix:(NSString *)prefix {

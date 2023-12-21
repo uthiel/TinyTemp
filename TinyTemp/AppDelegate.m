@@ -11,10 +11,9 @@
 #import "UTStatusItemViewController.h"
 #import <ServiceManagement/ServiceManagement.h>
 
-
 // user defaults keys
 static NSString *def_sensor_selection	= @"sensor_selection_2";
-
+static NSString *def_degree_unit        = @"degreeUnit";
 
 // MARK: - AppDeleghate
 @interface AppDelegate () <NSMenuDelegate>
@@ -62,7 +61,8 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
 		
 		[self writeUserDefaultsSensorSelection];
 	}
-	
+    DegreeUnit = [self userDefaultDegreeUnit];
+
 	// start cpu timer
 	timer_cpu			= [NSTimer timerWithTimeInterval:5.0 target:self selector:@selector(updateCPU:) userInfo:nil repeats:YES];
 	[[NSRunLoop currentRunLoop] addTimer:timer_cpu forMode:NSRunLoopCommonModes];// required for menu items to update while a menu is open
@@ -109,7 +109,11 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
 	if (temp < 0.0) {// will be negative if sensor count is 0
 		return @"-";
 	} else {
-		return [NSString stringWithFormat:@"%.0fºC", round(temp)];
+        double tempTemp = temp;
+        if('F' == DegreeUnit) {
+            tempTemp = (tempTemp * 1.8) + 32;
+        }
+		return [NSString stringWithFormat:@"%.0fº%c", round(tempTemp), (int)DegreeUnit];
 	}
 }
 
@@ -127,6 +131,17 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
 	}
 	NSArray *array	= [selections sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:nil ascending:YES]]];
 	[NSUserDefaults.standardUserDefaults setObject:array forKey:def_sensor_selection];
+}
+
+// Degree Unit User Defaults
+- (char)userDefaultDegreeUnit {
+    char degree_unit = [NSUserDefaults.standardUserDefaults integerForKey:def_degree_unit];
+    if('F' != degree_unit) degree_unit = 'C';
+    return degree_unit;
+}
+- (void)writeUserDefaultsDegeeUnit {
+    [[NSUserDefaults standardUserDefaults] setInteger:DegreeUnit forKey:def_degree_unit];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 //MARK: StatusItem Updates
