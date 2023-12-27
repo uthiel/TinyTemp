@@ -29,6 +29,7 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
 	NSTimer *timer_cpu, *timer_ssd, *timer_batt;
 	double    temp_cpu,   temp_ssd,   temp_batt;
 	BOOL    update_cpu, update_ssd, update_batt;
+    NSMeasurementFormatter *formatter;
 }
 
 - (void)awakeFromNib {
@@ -85,6 +86,10 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
 	[self updateCPU:nil];
 	[self updateSSD:nil];
 	[self updateBatt:nil];
+
+    formatter = [NSMeasurementFormatter new];
+    formatter.locale = NSLocale.autoupdatingCurrentLocale;
+    formatter.unitStyle = NSFormattingUnitStyleMedium;
 }
 
 - (void)configureMenu:(NSMenu *)menu withSensorArray:(NSArray *)array {
@@ -109,7 +114,7 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
 	if (temp < 0.0) {// will be negative if sensor count is 0
 		return @"-";
 	} else {
-		return [NSString stringWithFormat:@"%.0fºC", round(temp)];
+        return [formatter stringFromMeasurement:[[NSMeasurement alloc] initWithDoubleValue:temp unit:[NSUnitTemperature celsius]]];
 	}
 }
 
