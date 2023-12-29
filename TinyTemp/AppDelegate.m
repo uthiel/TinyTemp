@@ -91,6 +91,7 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
     formatter.locale = NSLocale.autoupdatingCurrentLocale;
     formatter.unitStyle = NSFormattingUnitStyleMedium;
     formatter.numberFormatter.maximumFractionDigits = 1;
+    formatter.numberFormatter.minimumFractionDigits = 1;
 }
 
 - (void)configureMenu:(NSMenu *)menu withSensorArray:(NSArray *)array {
