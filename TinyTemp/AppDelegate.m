@@ -90,6 +90,7 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
     formatter = [NSMeasurementFormatter new];
     formatter.locale = NSLocale.autoupdatingCurrentLocale;
     formatter.unitStyle = NSFormattingUnitStyleMedium;
+    formatter.numberFormatter.maximumFractionDigits = 1;
 }
 
 - (void)configureMenu:(NSMenu *)menu withSensorArray:(NSArray *)array {
