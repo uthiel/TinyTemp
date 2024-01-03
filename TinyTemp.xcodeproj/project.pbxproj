@@ -187,7 +187,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 1510;
 				TargetAttributes = {
 					4CC15CAB2AECED03005150EC = {
 						CreatedOnToolsVersion = 15.0.1;
@@ -300,6 +300,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -361,6 +362,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -390,7 +392,8 @@
 				CODE_SIGN_ENTITLEMENTS = TinyTemp/TinyTemp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = B42PBJA6QF;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -403,7 +406,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.41;
+				MARKETING_VERSION = 1.42;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.udo-thiel.TinyTemp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -419,7 +422,8 @@
 				CODE_SIGN_ENTITLEMENTS = TinyTemp/TinyTemp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = B42PBJA6QF;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -432,7 +436,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.41;
+				MARKETING_VERSION = 1.42;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.udo-thiel.TinyTemp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -443,6 +447,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = B42PBJA6QF;
 				ENABLE_HARDENED_RUNTIME = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.udo-thiel.TinyTemp";
@@ -454,6 +459,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = B42PBJA6QF;
 				ENABLE_HARDENED_RUNTIME = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.udo-thiel.TinyTemp";

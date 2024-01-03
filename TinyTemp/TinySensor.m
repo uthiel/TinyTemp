@@ -6,6 +6,7 @@
 //
 
 #import "TinySensor.h"
+#import "AppDelegate.h"
 
 extern CFTypeRef	IOHIDServiceClientCopyEvent(IOHIDServiceClientRef, int64_t, int64_t, int64_t);
 extern double   	IOHIDEventGetFloatValue(CFTypeRef, int64_t);
@@ -84,7 +85,8 @@ static NSString *pre_pmu_tp	= @"PMU TP";
 }
 
 - (NSString *)nameAndTemperature {
-	return [NSString stringWithFormat:@"%-12s %.1fºC", self.prettyName.UTF8String, self.temperature];
+	NSString *temp	= [(AppDelegate *)NSApp.delegate formattedTempForTemp:self.temperature];
+	return [NSString stringWithFormat:@"%-12s %@", self.prettyName.UTF8String, temp];
 }
 
 - (BOOL)matchesPrefix:(NSString *)prefix {

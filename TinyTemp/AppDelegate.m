@@ -29,6 +29,7 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
 	NSTimer *timer_cpu, *timer_ssd, *timer_batt;
 	double    temp_cpu,   temp_ssd,   temp_batt;
 	BOOL    update_cpu, update_ssd, update_batt;
+	NSMeasurementFormatter *t_formatter;
 }
 
 - (void)awakeFromNib {
@@ -43,6 +44,13 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	
+	// configure temp formatter
+	t_formatter											= NSMeasurementFormatter.alloc.init;
+	t_formatter.locale									= NSLocale.autoupdatingCurrentLocale;
+	t_formatter.unitStyle								= NSFormattingUnitStyleMedium;
+	t_formatter.numberFormatter.maximumFractionDigits	= 0; // we like to keep it tiny
+	t_formatter.numberFormatter.minimumFractionDigits	= 0;
+
 	// show initial popover
 	UTStatusItemViewController *vc	= [UTStatusItemViewController.alloc initWithStatusItem:self.statusItem];
 	[vc showPopover];
@@ -99,7 +107,8 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
 				sensor.selected	= YES;
 			}
 		}
-		NSMenuItem *item 		= [menu addItemWithTitle:sensor.nameAndTemperature action:@selector(toggleSensor:) keyEquivalent:@""];
+		NSString *title			= [self titleForSensor:sensor];
+		NSMenuItem *item 		= [menu addItemWithTitle:title action:@selector(toggleSensor:) keyEquivalent:@""];
 		item.representedObject	= sensor;
 		[item bind:NSValueBinding toObject:sensor withKeyPath:@"selected" options:nil];
 	}
@@ -109,7 +118,8 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
 	if (temp < 0.0) {// will be negative if sensor count is 0
 		return @"-";
 	} else {
-		return [NSString stringWithFormat:@"%.0fºC", round(temp)];
+		NSMeasurement *m	= [NSMeasurement.alloc initWithDoubleValue:temp unit:NSUnitTemperature.celsius];
+		return [t_formatter stringFromMeasurement:m];
 	}
 }
 
@@ -178,9 +188,12 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
 	for (NSMenuItem *item in menu.itemArray) {
 		if ([item.representedObject isKindOfClass:TinySensor.class]) {
 			TinySensor *sensor	= (TinySensor *)item.representedObject;
-			item.title			= sensor.nameAndTemperature;
+			item.title			= [self titleForSensor:sensor];
 		}
 	}
+}
+- (NSString *)titleForSensor:(TinySensor *)sensor {
+	return [sensor nameAndTemperature];
 }
 - (void)toggleSensor:(NSMenuItem *)item {
 	// at this point, item.state isn't toggled yet, therefore we need to wait for the next run loop

@@ -9,6 +9,7 @@
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 
+- (NSString *)formattedTempForTemp:(double)temp;
 
 @end
 
