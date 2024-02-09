@@ -8,6 +8,8 @@
 #import "UTStatusItemViewController.h"
 #import "NSBundle+ut.h"
 
+static NSString * const kStatusItemViewControllerDefaultsKey= @"didViewStatusItemPopOver";
+
 @interface UTStatusItemViewController ()
 @property NSPopover *pop;
 @property (weak) NSStatusItem *statusItem;
@@ -41,28 +43,22 @@
 }
 
 - (void)showPopover {
+	[NSUserDefaults.standardUserDefaults setBool:YES forKey:kStatusItemViewControllerDefaultsKey];
 	
-	NSString *defaultsKey= @"didViewStatusItemPopOver";
+	NSTextField *tf	= [NSTextField labelWithString:self.message];
+	tf.alignment	= NSTextAlignmentCenter;
 	
-	if (![NSUserDefaults.standardUserDefaults boolForKey:defaultsKey]) {
-		
-		[NSUserDefaults.standardUserDefaults setBool:YES forKey:defaultsKey];
-		
-		NSTextField *tf	= [NSTextField labelWithString:self.message];
-		tf.alignment	= NSTextAlignmentCenter;
-		
-		NSButton *butt	= [NSButton buttonWithTitle:@"OK" target:self action:@selector(closePopOver:)];
-		
-		NSStackView *sv	= [NSStackView stackViewWithViews:@[tf, butt]];
-		sv.orientation	= NSUserInterfaceLayoutOrientationVertical;
-		sv.spacing		= 15.0;
-		sv.edgeInsets	= NSEdgeInsetsMake(15.0, 10.0, 15.0, 10.0);
-		self.view		= sv;
-		
-		self.pop						= NSPopover.alloc.init;
-		self.pop.contentViewController	= self;
-		[self.pop showRelativeToRect:self.statusItem.button.bounds ofView:self.statusItem.button preferredEdge:NSMinYEdge];
-	}
+	NSButton *butt	= [NSButton buttonWithTitle:@"OK" target:self action:@selector(closePopOver:)];
+	
+	NSStackView *sv	= [NSStackView stackViewWithViews:@[tf, butt]];
+	sv.orientation	= NSUserInterfaceLayoutOrientationVertical;
+	sv.spacing		= 15.0;
+	sv.edgeInsets	= NSEdgeInsetsMake(15.0, 10.0, 15.0, 10.0);
+	self.view		= sv;
+	
+	self.pop						= NSPopover.alloc.init;
+	self.pop.contentViewController	= self;
+	[self.pop showRelativeToRect:self.statusItem.button.bounds ofView:self.statusItem.button preferredEdge:NSMinYEdge];
 }
 
 - (IBAction)closePopOver:(id)sender {
