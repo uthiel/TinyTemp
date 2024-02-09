@@ -177,9 +177,11 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
 
 //MARK: all cpu/ssd/batt menus
 - (void)menuWillOpen:(NSMenu *)menu {
-	if (menu == self.cpuMenu ) { update_cpu		= YES;}
-	if (menu == self.ssdMenu ) { update_ssd		= YES;}
-	if (menu == self.battMenu) { update_batt	= YES;}
+	// for performance reasons, we only update the temperature menus if they are actually open
+	// we need to update the menu immediately, otherwise it will show outdated values
+	if (menu == self.cpuMenu ) { update_cpu		= YES; [self updateSensorMenu:menu];}
+	if (menu == self.ssdMenu ) { update_ssd		= YES; [self updateSensorMenu:menu];}
+	if (menu == self.battMenu) { update_batt	= YES; [self updateSensorMenu:menu];}
 }
 - (void)menuDidClose:(NSMenu *)menu {
 	if (menu == self.cpuMenu ) { update_cpu		= NO;}
