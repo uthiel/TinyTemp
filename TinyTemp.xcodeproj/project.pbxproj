@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		4C1465552B2BDE69006E1C54 /* NSBundle+ut.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1465522B2BDE69006E1C54 /* NSBundle+ut.m */; };
 		4C1465562B2BDE69006E1C54 /* UTStatusItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1465532B2BDE69006E1C54 /* UTStatusItemViewController.m */; };
-		4C4DE1C22B76F9F100D40058 /* dump-sensors in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CC15CDA2AF12511005150EC /* dump-sensors */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4C67DCC42B07442D00BA422B /* TinySensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C67DCC32B07442D00BA422B /* TinySensor.m */; };
 		4C67DCC52B07475B00BA422B /* TinySensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C67DCC32B07442D00BA422B /* TinySensor.m */; };
 		4CC15CB12AECED03005150EC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC15CB02AECED03005150EC /* AppDelegate.m */; };
@@ -22,15 +21,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		4C4DE1C12B76F9D900D40058 /* CopyFiles */ = {
+		4CC15CD82AF12511005150EC /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 6;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
 			files = (
-				4C4DE1C22B76F9F100D40058 /* dump-sensors in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -155,7 +153,6 @@
 				4CC15CA82AECED03005150EC /* Sources */,
 				4CC15CA92AECED03005150EC /* Frameworks */,
 				4CC15CAA2AECED03005150EC /* Resources */,
-				4C4DE1C12B76F9D900D40058 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -172,6 +169,7 @@
 			buildPhases = (
 				4CC15CD62AF12511005150EC /* Sources */,
 				4CC15CD72AF12511005150EC /* Frameworks */,
+				4CC15CD82AF12511005150EC /* CopyFiles */,
 			);
 			buildRules = (
 			);
