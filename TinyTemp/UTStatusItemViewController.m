@@ -8,6 +8,8 @@
 #import "UTStatusItemViewController.h"
 #import "NSBundle+ut.h"
 
+static NSString * const kStatusItemViewControllerDefaultsKey= @"didViewStatusItemPopOver";
+
 @interface UTStatusItemViewController ()
 @property NSPopover *pop;
 @property (weak) NSStatusItem *statusItem;
@@ -17,23 +19,15 @@
 
 @implementation UTStatusItemViewController
 - (instancetype)initWithStatusItem:(NSStatusItem *)item message:(NSString *)message popoverDidCLose:(void (^)(void))block {
-	NSString *defaultsKey= @"didViewStatusItemPopOver";
-	
-	if ([NSUserDefaults.standardUserDefaults boolForKey:defaultsKey]) {
-		return nil;
-	} else {
-		[NSUserDefaults.standardUserDefaults setBool:YES forKey:defaultsKey];
-		self = [super init];
-
-		if (self) {
-			_statusItem	= item;
-			_message	= (message) ? message : self.class.standardMessage;
-			_block		= block;
-		}
-		return self;
+	self = [super init];
+	if (self) {
+		_statusItem	= item;
+		_message	= (message) ? message : self.class.standardMessage;
+		_block		= block;
 	}
-}
+	return self;
 
+}
 - (instancetype)initWithStatusItem:(NSStatusItem *)item {
 	return [self initWithStatusItem:item message:self.class.standardMessage popoverDidCLose:nil];
 }
@@ -49,6 +43,8 @@
 }
 
 - (void)showPopover {
+	[NSUserDefaults.standardUserDefaults setBool:YES forKey:kStatusItemViewControllerDefaultsKey];
+	
 	NSTextField *tf	= [NSTextField labelWithString:self.message];
 	tf.alignment	= NSTextAlignmentCenter;
 	

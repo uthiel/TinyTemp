@@ -9,6 +9,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+static NSString * const kStatusItemViewControllerDefaultsKey;
+
 @interface UTStatusItemViewController : NSViewController
 
 /// Creates a Popover below the status item containing a OK button.
