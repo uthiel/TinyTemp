@@ -52,10 +52,8 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
 	t_formatter.numberFormatter.minimumFractionDigits	= 0;
 
 	// show initial popover
-	if (![NSUserDefaults.standardUserDefaults boolForKey:kStatusItemViewControllerDefaultsKey]) {
-		UTStatusItemViewController *vc	= [UTStatusItemViewController.alloc initWithStatusItem:self.statusItem];
-		[vc showPopover];
-	}
+	UTStatusItemViewController *vc	= [UTStatusItemViewController.alloc initWithStatusItem:self.statusItem];
+	[vc showPopover];
 	
 	// update lal
 	[self updateLaunchAtLoginMenuItem];
