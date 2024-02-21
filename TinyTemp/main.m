@@ -56,7 +56,7 @@ int main(int argc, const char * argv[]) {
 	} else {
 		// switch to UI mode
 		ProcessSerialNumber psn = { 0, kCurrentProcess };
-		TransformProcessType(&psn, kProcessTransformToForegroundApplication);
+		TransformProcessType(&psn, kProcessTransformToUIElementApplication);
 		return NSApplicationMain(argc, argv);
 	}
 }
