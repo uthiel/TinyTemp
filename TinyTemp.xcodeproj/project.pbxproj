@@ -10,27 +10,12 @@
 		4C1465552B2BDE69006E1C54 /* NSBundle+ut.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1465522B2BDE69006E1C54 /* NSBundle+ut.m */; };
 		4C1465562B2BDE69006E1C54 /* UTStatusItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1465532B2BDE69006E1C54 /* UTStatusItemViewController.m */; };
 		4C67DCC42B07442D00BA422B /* TinySensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C67DCC32B07442D00BA422B /* TinySensor.m */; };
-		4C67DCC52B07475B00BA422B /* TinySensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C67DCC32B07442D00BA422B /* TinySensor.m */; };
 		4CC15CB12AECED03005150EC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC15CB02AECED03005150EC /* AppDelegate.m */; };
 		4CC15CB32AECED03005150EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CC15CB22AECED03005150EC /* Assets.xcassets */; };
 		4CC15CB62AECED03005150EC /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC15CB42AECED03005150EC /* MainMenu.xib */; };
 		4CC15CB82AECED03005150EC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC15CB72AECED03005150EC /* main.m */; };
 		4CC15CCE2AED072C005150EC /* IOHID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC15CCD2AED072C005150EC /* IOHID.m */; };
-		4CC15CDD2AF12511005150EC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC15CDC2AF12511005150EC /* main.m */; };
-		4CC15CE12AF1269B005150EC /* IOHID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC15CCD2AED072C005150EC /* IOHID.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		4CC15CD82AF12511005150EC /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4C1465512B2BDE69006E1C54 /* NSBundle+ut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+ut.h"; sourceTree = "<group>"; };
@@ -52,20 +37,11 @@
 		4CC15CC32AECF123005150EC /* SMC-Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SMC-Internal.h"; sourceTree = "<group>"; };
 		4CC15CCC2AED072C005150EC /* IOHID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOHID.h; sourceTree = "<group>"; };
 		4CC15CCD2AED072C005150EC /* IOHID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IOHID.m; sourceTree = "<group>"; };
-		4CC15CDA2AF12511005150EC /* dump-sensors */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "dump-sensors"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4CC15CDC2AF12511005150EC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4CC15CE22AF22D99005150EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		4CC15CA92AECED03005150EC /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4CC15CD72AF12511005150EC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -80,7 +56,6 @@
 			children = (
 				4CA9B2BF2AF6A9B700B40821 /* README.md */,
 				4CC15CAE2AECED03005150EC /* TinyTemp */,
-				4CC15CDB2AF12511005150EC /* dump-sensors */,
 				4CC15CAD2AECED03005150EC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -89,7 +64,6 @@
 			isa = PBXGroup;
 			children = (
 				4CC15CAC2AECED03005150EC /* TinyTemp.app */,
-				4CC15CDA2AF12511005150EC /* dump-sensors */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -135,14 +109,6 @@
 			path = IOHID;
 			sourceTree = "<group>";
 		};
-		4CC15CDB2AF12511005150EC /* dump-sensors */ = {
-			isa = PBXGroup;
-			children = (
-				4CC15CDC2AF12511005150EC /* main.m */,
-			);
-			path = "dump-sensors";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -163,23 +129,6 @@
 			productReference = 4CC15CAC2AECED03005150EC /* TinyTemp.app */;
 			productType = "com.apple.product-type.application";
 		};
-		4CC15CD92AF12511005150EC /* dump-sensors */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4CC15CDE2AF12511005150EC /* Build configuration list for PBXNativeTarget "dump-sensors" */;
-			buildPhases = (
-				4CC15CD62AF12511005150EC /* Sources */,
-				4CC15CD72AF12511005150EC /* Frameworks */,
-				4CC15CD82AF12511005150EC /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "dump-sensors";
-			productName = "dump-sensors";
-			productReference = 4CC15CDA2AF12511005150EC /* dump-sensors */;
-			productType = "com.apple.product-type.tool";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -190,9 +139,6 @@
 				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					4CC15CAB2AECED03005150EC = {
-						CreatedOnToolsVersion = 15.0.1;
-					};
-					4CC15CD92AF12511005150EC = {
 						CreatedOnToolsVersion = 15.0.1;
 					};
 				};
@@ -211,7 +157,6 @@
 			projectRoot = "";
 			targets = (
 				4CC15CAB2AECED03005150EC /* TinyTemp */,
-				4CC15CD92AF12511005150EC /* dump-sensors */,
 			);
 		};
 /* End PBXProject section */
@@ -239,16 +184,6 @@
 				4C1465552B2BDE69006E1C54 /* NSBundle+ut.m in Sources */,
 				4CC15CB12AECED03005150EC /* AppDelegate.m in Sources */,
 				4CC15CCE2AED072C005150EC /* IOHID.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4CC15CD62AF12511005150EC /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4CC15CE12AF1269B005150EC /* IOHID.m in Sources */,
-				4C67DCC52B07475B00BA422B /* TinySensor.m in Sources */,
-				4CC15CDD2AF12511005150EC /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,7 +327,7 @@
 				CODE_SIGN_ENTITLEMENTS = TinyTemp/TinyTemp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = B42PBJA6QF;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -406,7 +341,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.43;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.udo-thiel.TinyTemp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -422,7 +357,7 @@
 				CODE_SIGN_ENTITLEMENTS = TinyTemp/TinyTemp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = B42PBJA6QF;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -436,34 +371,10 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.43;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.udo-thiel.TinyTemp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-			};
-			name = Release;
-		};
-		4CC15CDF2AF12511005150EC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = B42PBJA6QF;
-				ENABLE_HARDENED_RUNTIME = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "de.udo-thiel.TinyTemp";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		4CC15CE02AF12511005150EC /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = B42PBJA6QF;
-				ENABLE_HARDENED_RUNTIME = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "de.udo-thiel.TinyTemp";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -484,15 +395,6 @@
 			buildConfigurations = (
 				4CC15CBD2AECED03005150EC /* Debug */,
 				4CC15CBE2AECED03005150EC /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		4CC15CDE2AF12511005150EC /* Build configuration list for PBXNativeTarget "dump-sensors" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4CC15CDF2AF12511005150EC /* Debug */,
-				4CC15CE02AF12511005150EC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
