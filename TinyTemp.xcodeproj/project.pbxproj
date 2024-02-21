@@ -15,6 +15,7 @@
 		4CC15CB62AECED03005150EC /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC15CB42AECED03005150EC /* MainMenu.xib */; };
 		4CC15CB82AECED03005150EC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC15CB72AECED03005150EC /* main.m */; };
 		4CC15CCE2AED072C005150EC /* IOHID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC15CCD2AED072C005150EC /* IOHID.m */; };
+		4CFE346E2B868A460009C6FD /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 4CFE346D2B868A460009C6FD /* Credits.rtf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		4CC15CCC2AED072C005150EC /* IOHID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOHID.h; sourceTree = "<group>"; };
 		4CC15CCD2AED072C005150EC /* IOHID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IOHID.m; sourceTree = "<group>"; };
 		4CC15CE22AF22D99005150EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		4CFE346D2B868A460009C6FD /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 		4CC15CAE2AECED03005150EC /* TinyTemp */ = {
 			isa = PBXGroup;
 			children = (
+				4CFE346D2B868A460009C6FD /* Credits.rtf */,
 				4C1465512B2BDE69006E1C54 /* NSBundle+ut.h */,
 				4C1465522B2BDE69006E1C54 /* NSBundle+ut.m */,
 				4C1465542B2BDE69006E1C54 /* UTStatusItemViewController.h */,
@@ -167,6 +170,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CC15CB32AECED03005150EC /* Assets.xcassets in Resources */,
+				4CFE346E2B868A460009C6FD /* Credits.rtf in Resources */,
 				4CC15CB62AECED03005150EC /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -335,7 +339,7 @@
 				INFOPLIST_FILE = TinyTemp/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2023 Udo Thiel";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2023-2024 Udo Thiel";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -365,7 +369,7 @@
 				INFOPLIST_FILE = TinyTemp/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2023 Udo Thiel";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2023-2024 Udo Thiel";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
