@@ -9,7 +9,7 @@
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 
-- (NSString *)formattedTempForTemp:(double)temp;
+- (NSString *)localisedMenuTempForTemp:(double)temp;
 
 @end
 

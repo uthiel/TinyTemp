@@ -29,7 +29,7 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
 	NSTimer *timer_cpu, *timer_ssd, *timer_batt;
 	double    temp_cpu,   temp_ssd,   temp_batt;
 	BOOL    update_cpu, update_ssd, update_batt;
-	NSMeasurementFormatter *t_formatter;
+	NSMeasurementFormatter *t_formatter_0, *t_formatter_1;
 }
 
 - (void)awakeFromNib {
@@ -45,11 +45,17 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	
 	// configure temp formatter
-	t_formatter											= NSMeasurementFormatter.alloc.init;
-	t_formatter.locale									= NSLocale.autoupdatingCurrentLocale;
-	t_formatter.unitStyle								= NSFormattingUnitStyleMedium;
-	t_formatter.numberFormatter.maximumFractionDigits	= 0; // we like to keep it tiny
-	t_formatter.numberFormatter.minimumFractionDigits	= 0;
+	t_formatter_0										= NSMeasurementFormatter.alloc.init;
+	t_formatter_0.locale								= NSLocale.autoupdatingCurrentLocale;
+	t_formatter_0.unitStyle								= NSFormattingUnitStyleMedium;
+	t_formatter_0.numberFormatter.maximumFractionDigits	= 0; // we like to keep it tiny in the status bar
+	t_formatter_0.numberFormatter.minimumFractionDigits	= 0;
+
+	t_formatter_1										= NSMeasurementFormatter.alloc.init;
+	t_formatter_1.locale								= NSLocale.autoupdatingCurrentLocale;
+	t_formatter_1.unitStyle								= NSFormattingUnitStyleMedium;
+	t_formatter_1.numberFormatter.maximumFractionDigits	= 1; // increase precision for menu temps
+	t_formatter_1.numberFormatter.minimumFractionDigits	= 1;
 
 	// show initial popover
 	UTStatusItemViewController *vc	= [UTStatusItemViewController.alloc initWithStatusItem:self.statusItem];
@@ -114,13 +120,20 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
 	}
 }
 
-- (NSString *)formattedTempForTemp:(double)temp {
+//MARK: formatting
+- (NSString *)localisedTempForTemp:(double)temp withFormatter:(NSMeasurementFormatter *)formatter {
 	if (temp < 0.0) {// will be negative if sensor count is 0
 		return @"-";
 	} else {
 		NSMeasurement *m	= [NSMeasurement.alloc initWithDoubleValue:temp unit:NSUnitTemperature.celsius];
-		return [t_formatter stringFromMeasurement:m];
+		return [formatter stringFromMeasurement:m];
 	}
+}
+- (NSString *)localisedTempForTemp:(double)temp {
+	return [self localisedTempForTemp:temp withFormatter:t_formatter_0];
+}
+- (NSString *)localisedMenuTempForTemp:(double)temp {
+	return [self localisedTempForTemp:temp withFormatter:t_formatter_1];
 }
 
 //MARK: Sensor Selection User Defaults
@@ -130,7 +143,7 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
 }
 - (void)writeUserDefaultsSensorSelection {
 	NSMutableSet *selections = NSMutableSet.set;
-	for (TinySensor *sensor in self->iohid.allSensors) {
+	for (TinySensor *sensor in iohid.allSensors) {
 		if (sensor.selected) {
 			[selections addObject:sensor.locationID];
 		}
@@ -142,14 +155,14 @@ static NSString *def_sensor_selection	= @"sensor_selection_2";
 //MARK: StatusItem Updates
 - (void)updateStatusItemToolTip {
 	NSString *cpu	= self.statusItem.button.title;
-	NSString *ssd	= [self formattedTempForTemp:temp_ssd];
-	NSString *batt	= [self formattedTempForTemp:temp_batt];
+	NSString *ssd	= [self localisedTempForTemp:temp_ssd];
+	NSString *batt	= [self localisedTempForTemp:temp_batt];
 	
 	self.statusItem.button.toolTip	= [NSString stringWithFormat:@"CPU:%@ SSD:%@ Batt:%@", cpu, ssd, batt];
 }
 - (void)updateCPU:(NSTimer *)timer {
 	temp_cpu						= [iohid readPMUTemperature];
-	self.statusItem.button.title	= [self formattedTempForTemp:temp_cpu];
+	self.statusItem.button.title	= [self localisedTempForTemp:temp_cpu];
 	[self updateStatusItemToolTip];
 	
 	if (update_cpu) {

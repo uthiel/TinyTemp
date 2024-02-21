@@ -85,7 +85,7 @@ static NSString *pre_pmu_tp	= @"PMU TP";
 }
 
 - (NSString *)nameAndTemperature {
-	NSString *temp	= [(AppDelegate *)NSApp.delegate formattedTempForTemp:self.temperature];
+	NSString *temp	= [(AppDelegate *)NSApp.delegate localisedMenuTempForTemp:self.temperature];
 	return [NSString stringWithFormat:@"%-12s %@", self.prettyName.UTF8String, temp];
 }
 
